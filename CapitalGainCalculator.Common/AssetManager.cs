@@ -57,8 +57,10 @@ namespace CapitalGainCalculator.Common
                     if (transaction is Disposal)
                     {
                         totalDisposalsValue += transaction.NumberOfShares * transaction.UnitPrice;
+                        var chargeableGain = CalculateChargeableGain((Disposal)transaction);
+                        cumulativeChargeableGain += chargeableGain;
                         ++totalDisposals;
-                        builder.AppendLine($"\tChargeable gain: {cumulativeChargeableGain+=CalculateChargeableGain((Disposal)transaction):C2}");
+                        builder.AppendLine($"\tChargeable gain: {chargeableGain:C2}");
                     }
                     else 
                     {
