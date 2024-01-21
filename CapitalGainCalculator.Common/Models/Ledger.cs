@@ -1,3 +1,4 @@
+using System.Text;
 using CapitalGainCalculator.Common.Interfaces;
 
 namespace CapitalGainCalculator.Common.Models
@@ -5,12 +6,10 @@ namespace CapitalGainCalculator.Common.Models
     public class Ledger : ILedger
     {
         private readonly IList<Transaction> _transactions;
-        private Ledger()
+        public Ledger()
         {
             _transactions = new List<Transaction>();
         }
-
-        public static ILedger CreateObject() => new Ledger();
 
         public decimal TotalNumberOfShares(IAsset asset) => _transactions.Where(t => t.Asset.Name == asset.Name).Sum(t => t.NumberOfShares);
 
@@ -19,6 +18,16 @@ namespace CapitalGainCalculator.Common.Models
         public void RegisterTransaction(Transaction transaction)
         {
             _transactions.Add(transaction);
+        }
+
+        public override string ToString() 
+        {
+            var builder = new StringBuilder();
+            foreach (var transaction in _transactions)
+            {
+                builder.AppendLine(transaction.ToString());
+            }
+            return builder.ToString();
         }
     }
 }

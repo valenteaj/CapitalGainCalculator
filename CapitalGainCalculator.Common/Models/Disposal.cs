@@ -4,6 +4,7 @@ namespace CapitalGainCalculator.Common.Models
 {
     public class Disposal : Transaction
     {
+        protected override string TransactionType => "Disposal";
         public Disposal(
             IAsset asset,
             decimal unitPrice, 

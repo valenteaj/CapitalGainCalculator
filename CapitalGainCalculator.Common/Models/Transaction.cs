@@ -16,5 +16,10 @@ namespace CapitalGainCalculator.Common.Models
         public decimal NumberOfShares {get; init;}
         public decimal TransactionCosts {get; init;}
         public abstract decimal ProofOfActualCost {get;}
+        protected abstract string TransactionType {get;}
+        public override string ToString()
+        {
+            return $"{TransactionType} [{Asset.Name}]: {NumberOfShares} @ {UnitPrice:C2}/share";
+        }
     }
 }
