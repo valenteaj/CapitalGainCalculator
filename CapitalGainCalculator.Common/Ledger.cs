@@ -12,18 +12,13 @@ namespace CapitalGainCalculator.Common
             _transactions = new List<Transaction>();
         }
 
-        public decimal TotalNumberOfShares(IAsset asset, DateTimeOffset? atTimePoint = null) => _transactions
-            .Where(t => t.TransactionDate < (atTimePoint ?? DateTimeOffset.MaxValue))
-            .Where(t => t.Asset.Name == asset.Name)
-            .Sum(t => t.NumberOfShares);
-
         public decimal TotalProofOfActualCost(IAsset asset, DateTimeOffset? atTimePoint = null)
         {
             decimal cumulativeShares = 0;
             decimal cumulativeCost = 0;
             
-            var assetTransactions = _transactions
-                .Where(t => t.Asset.Name == asset.Name)
+            var assetTransactions = 
+                GetTransactionsByAsset(asset)
                 .Where(t => t.TransactionDate < (atTimePoint ?? DateTimeOffset.MaxValue));
 
             foreach (var transaction in assetTransactions)
@@ -43,11 +38,17 @@ namespace CapitalGainCalculator.Common
             return cumulativeCost;
         } 
 
-        public void RegisterTransaction(Transaction transaction)
-        {
-            _transactions.Add(transaction);
-        }
+        public decimal TotalNumberOfShares(IAsset asset, DateTimeOffset? atTimePoint = null) => 
+            GetTransactionsByAsset(asset)
+            .Where(t => t.TransactionDate < (atTimePoint ?? DateTimeOffset.MaxValue))
+            .Sum(t => t.NumberOfShares);
 
+        public void RegisterTransaction(Transaction transaction) => _transactions.Add(transaction);
+        
+        public IEnumerable<Transaction> GetTransactionsByAsset(IAsset asset) => _transactions.Where(t => t.Asset.Name == asset.Name);
+
+        public IEnumerable<IAsset> Assets => _transactions.Select(t => t.Asset).Distinct();
+        
         public override string ToString() 
         {
             var builder = new StringBuilder();

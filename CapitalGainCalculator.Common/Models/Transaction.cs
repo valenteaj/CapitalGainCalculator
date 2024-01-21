@@ -20,7 +20,7 @@ namespace CapitalGainCalculator.Common.Models
         protected abstract string TransactionType {get;}
         public override string ToString()
         {
-            return $"{TransactionDate} {TransactionType} [{Asset.Name}]: {NumberOfShares} @ {UnitPrice:C2}/share";
+            return $"{TransactionDate} {TransactionType} [{Asset.Name}]: {NumberOfShares}@{UnitPrice:C2} = {NumberOfShares*UnitPrice:C2}";
         }
     }
 }

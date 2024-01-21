@@ -1,3 +1,4 @@
+using System.Text;
 using CapitalGainCalculator.Common.Interfaces;
 using CapitalGainCalculator.Common.Models;
 
@@ -33,6 +34,48 @@ namespace CapitalGainCalculator.Common
             
             var chargeableGain = ((disposalProceeds - allowableCost) * -1) - disposal.TransactionCosts;
             return chargeableGain;
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            var assets = _ledger.Assets;
+            decimal cumulativeChargeableGain = 0;
+            decimal totalPurchases = 0;
+            decimal totalPurchasesValue = 0;
+            decimal totalDisposals = 0;
+            decimal totalDisposalsValue = 0;
+            decimal totalFeesPaid = 0;
+            foreach (var asset in assets)
+            {
+                builder.AppendLine(asset.Name);
+                builder.AppendLine(string.Empty.PadRight(asset.Name.Length, '='));
+                var assetTransactions = _ledger.GetTransactionsByAsset(asset);
+                foreach (var transaction in assetTransactions)
+                {
+                    builder.AppendLine(transaction.ToString());
+                    if (transaction is Disposal)
+                    {
+                        totalDisposalsValue += transaction.NumberOfShares * transaction.UnitPrice;
+                        ++totalDisposals;
+                        builder.AppendLine($"\tChargeable gain: {cumulativeChargeableGain+=CalculateChargeableGain((Disposal)transaction):C2}");
+                    }
+                    else 
+                    {
+                        totalPurchasesValue += transaction.NumberOfShares * transaction.UnitPrice;
+                        ++totalPurchases;
+                    }
+                    totalFeesPaid += transaction.TransactionCosts;
+                }
+                builder.AppendLine();
+            }
+            builder.AppendLine("Summary");
+            builder.AppendLine("=======");
+            builder.AppendLine($"Total Chargeable Gain: {cumulativeChargeableGain:C2}");
+            builder.AppendLine($"Total Purchases: {totalPurchasesValue:C2} ({totalPurchases} transactions)");
+            builder.AppendLine($"Total Disposals: {totalDisposalsValue:C2} ({totalDisposals} transactions)");
+            builder.AppendLine($"Total Fees Paid: {totalFeesPaid:C2}");
+            return builder.ToString();
         }
     }
 }
