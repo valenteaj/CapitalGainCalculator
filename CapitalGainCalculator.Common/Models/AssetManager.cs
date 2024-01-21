@@ -10,22 +10,29 @@ namespace CapitalGainCalculator.Common.Models
             _ledger = ledger;
         }
 
-        public void Buy(IAsset asset, decimal quantity, decimal unitPrice, decimal transactionCosts)
+        public Purchase Buy(IAsset asset, decimal quantity, decimal unitPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
         {
-            var transaction = new Purchase(asset, unitPrice, quantity, transactionCosts);
+            var transaction = new Purchase(asset, transactionDate ?? DateTimeOffset.UtcNow, unitPrice, quantity, transactionCosts);
             _ledger.RegisterTransaction(transaction);
+            return transaction;
         }
 
-        public decimal Sell(IAsset asset, decimal quantity, decimal currentPrice, decimal transactionCosts)
+        public Disposal Sell(IAsset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
         {
-            var disposalProceeds = quantity * currentPrice;
             var proofOfActualCost = _ledger.TotalProofOfActualCost(asset);
             var totalNumberOfShares = _ledger.TotalNumberOfShares(asset);
-            var allowableCost = proofOfActualCost * quantity / totalNumberOfShares;
-            var chargeableGain = disposalProceeds - allowableCost - transactionCosts;
-            
-            var transaction = new Disposal(asset, currentPrice, quantity, totalNumberOfShares, proofOfActualCost, transactionCosts);
+            var transaction = new Disposal(asset, transactionDate ?? DateTimeOffset.UtcNow, currentPrice, quantity, totalNumberOfShares, proofOfActualCost, transactionCosts);
             _ledger.RegisterTransaction(transaction);
+            return transaction;
+        }
+
+        public decimal CalculateChargeableGain(Disposal disposal)
+        {
+            var disposalProceeds = disposal.NumberOfShares * disposal.UnitPrice;
+            var totalNumberOfShares = _ledger.TotalNumberOfShares(disposal.Asset, disposal.TransactionDate);
+            var allowableCost = _ledger.TotalProofOfActualCost(disposal.Asset, disposal.TransactionDate) * disposal.NumberOfShares / totalNumberOfShares;
+            
+            var chargeableGain = ((disposalProceeds - allowableCost) * -1) - disposal.TransactionCosts;
             return chargeableGain;
         }
     }

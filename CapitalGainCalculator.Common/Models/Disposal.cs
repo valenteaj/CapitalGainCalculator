@@ -7,12 +7,13 @@ namespace CapitalGainCalculator.Common.Models
         protected override string TransactionType => "Disposal";
         public Disposal(
             IAsset asset,
+            DateTimeOffset purchaseDate,
             decimal unitPrice, 
             decimal numberOfShares, 
             decimal totalNumberOfSharesPriorToDisposal, 
             decimal totalProofOfActualCostPriorToDisposal,
             decimal transactionCosts) 
-            : base(asset, unitPrice, -numberOfShares, transactionCosts)
+            : base(asset, purchaseDate, unitPrice, -numberOfShares, transactionCosts)
         {
             _totalNumberOfSharePriorToDisposal = totalNumberOfSharesPriorToDisposal;
             _totalProofOfActualCostPriorToDisposal = totalProofOfActualCostPriorToDisposal;

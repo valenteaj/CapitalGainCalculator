@@ -11,9 +11,15 @@ namespace CapitalGainCalculator.Common.Models
             _transactions = new List<Transaction>();
         }
 
-        public decimal TotalNumberOfShares(IAsset asset) => _transactions.Where(t => t.Asset.Name == asset.Name).Sum(t => t.NumberOfShares);
+        public decimal TotalNumberOfShares(IAsset asset, DateTimeOffset? atTimePoint = null) => _transactions
+            .Where(t => t.TransactionDate < (atTimePoint ?? DateTimeOffset.MaxValue))
+            .Where(t => t.Asset.Name == asset.Name)
+            .Sum(t => t.NumberOfShares);
 
-        public decimal TotalProofOfActualCost(IAsset asset) => _transactions.Where(t => t.Asset.Name == asset.Name).Sum(t => t.ProofOfActualCost);
+        public decimal TotalProofOfActualCost(IAsset asset, DateTimeOffset? atTimePoint = null) => _transactions
+            .Where(t => t.TransactionDate < (atTimePoint ?? DateTimeOffset.MaxValue))
+            .Where(t => t.Asset.Name == asset.Name)
+            .Sum(t => t.ProofOfActualCost);
 
         public void RegisterTransaction(Transaction transaction)
         {

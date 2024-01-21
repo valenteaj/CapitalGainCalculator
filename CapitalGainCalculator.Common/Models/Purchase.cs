@@ -6,8 +6,8 @@ namespace CapitalGainCalculator.Common.Models
     {
         protected override string TransactionType => "Purchase";
 
-        public Purchase(IAsset asset, decimal unitPrice, decimal numberOfShares, decimal transactionCosts) 
-            : base(asset, unitPrice, numberOfShares, transactionCosts)
+        public Purchase(IAsset asset, DateTimeOffset purchaseDate, decimal unitPrice, decimal numberOfShares, decimal transactionCosts) 
+            : base(asset, purchaseDate, unitPrice, numberOfShares, transactionCosts)
         {
         }
         
