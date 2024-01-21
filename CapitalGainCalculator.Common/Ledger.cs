@@ -22,7 +22,7 @@ namespace CapitalGainCalculator.Common
             decimal cumulativeShares = 0;
             decimal cumulativeCost = 0;
             
-            var assetTransactions = _transactions.Where(t => t.TransactionDate < (atTimePoint ?? DateTimeOffset.MaxValue))
+            var assetTransactions = _transactions
                 .Where(t => t.Asset.Name == asset.Name)
                 .Where(t => t.TransactionDate < (atTimePoint ?? DateTimeOffset.MaxValue));
 
