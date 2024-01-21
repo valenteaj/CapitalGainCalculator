@@ -1,4 +1,5 @@
-﻿using CapitalGainCalculator.Common.Models;
+﻿using CapitalGainCalculator.Common;
+using CapitalGainCalculator.Common.Models;
 
 var ledger = new Ledger();
 var portfolio = new AssetManager(ledger);

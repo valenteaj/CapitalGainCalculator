@@ -1,6 +1,7 @@
 using CapitalGainCalculator.Common.Interfaces;
+using CapitalGainCalculator.Common.Models;
 
-namespace CapitalGainCalculator.Common.Models
+namespace CapitalGainCalculator.Common
 {
     public class AssetManager : IAssetManager
     {
