@@ -20,9 +20,7 @@ namespace CapitalGainCalculator.Common
 
         public Disposal Sell(IAsset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
         {
-            var proofOfActualCost = _ledger.TotalProofOfActualCost(asset);
-            var totalNumberOfShares = _ledger.TotalNumberOfShares(asset);
-            var transaction = new Disposal(asset, transactionDate ?? DateTimeOffset.UtcNow, currentPrice, quantity, totalNumberOfShares, proofOfActualCost, transactionCosts);
+            var transaction = new Disposal(asset, transactionDate ?? DateTimeOffset.UtcNow, currentPrice, quantity, transactionCosts);
             _ledger.RegisterTransaction(transaction);
             return transaction;
         }

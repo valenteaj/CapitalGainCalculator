@@ -5,19 +5,19 @@ var ledger = new Ledger();
 var portfolio = new AssetManager(ledger);
 
 var asset = new Asset("Vanguard FTSE Global All Cap");
-portfolio.Buy(asset, 10, 60, 3+3);
-portfolio.Buy(asset, 30, 80, 3+12);
+portfolio.Buy(asset, 10, 60, 3+3, new DateTimeOffset(new DateTime(2024, 1, 10)));
+portfolio.Buy(asset, 30, 80, 3+12, new DateTimeOffset(new DateTime(2024, 1, 11)));
 Console.WriteLine("Before sell 1 " + ledger.TotalProofOfActualCost(asset).ToString("C2"));
-var capGain1 = portfolio.Sell(asset, 10, 100, 3);
+var capGain1 = portfolio.Sell(asset, 10, 100, 3, new DateTimeOffset(new DateTime(2024, 1, 12)));
 Console.WriteLine($"Disposal 1 resulted in gain of {portfolio.CalculateChargeableGain(capGain1):C2}");
 Console.WriteLine("After sell 1 " + ledger.TotalProofOfActualCost(asset).ToString("C2"));
-portfolio.Buy(asset, 10, 120, 3+6);
+portfolio.Buy(asset, 10, 120, 3+6, new DateTimeOffset(new DateTime(2024, 1, 13)));
 Console.WriteLine("Before sell 2 " + ledger.TotalProofOfActualCost(asset).ToString("C2"));
-var capGain2 = portfolio.Sell(asset, 10, 150, 3);
+var capGain2 = portfolio.Sell(asset, 10, 150, 3, new DateTimeOffset(new DateTime(2024, 1, 14)));
 Console.WriteLine($"Disposal 2 resulted in gain of {portfolio.CalculateChargeableGain(capGain2):C2}");
 Console.WriteLine("After sell 2 " + ledger.TotalProofOfActualCost(asset).ToString("C2"));
 
-var asset2 = new Asset("Vanguard Something of other");
+var asset2 = new Asset("Vanguard Something or other");
 portfolio.Buy(asset2, 1000, 4, 150, new DateTimeOffset(new DateTime(2014, 4, 1)));
 Console.WriteLine("After buy 1 " + ledger.TotalProofOfActualCost(asset2).ToString("C2"));
 portfolio.Buy(asset2, 500, 4.10m, 80, new DateTimeOffset(new DateTime(2017, 9, 1)));
@@ -30,9 +30,9 @@ Console.WriteLine($"Disposal 2 resulted in gain of {portfolio.CalculateChargeabl
 Console.WriteLine("After sell 2 " + ledger.TotalProofOfActualCost(asset2).ToString("C2"));
 
 var asset3 = new Asset("ETH");
-portfolio.Buy(asset3, 0.64421416m, 155.2278826m, 0);
+portfolio.Buy(asset3, 0.64421416m, 155.2278826m, 0, new DateTimeOffset(new DateTime(2024, 1, 15)));
 Console.WriteLine("Before sell 1 " + ledger.TotalProofOfActualCost(asset3).ToString("C2"));
-var capGain4 = portfolio.Sell(asset3, 0.64421416m, 1933.56m, 3);
+var capGain4 = portfolio.Sell(asset3, 0.64421416m, 1933.56m, 3, new DateTimeOffset(new DateTime(2024, 1, 16)));
 Console.WriteLine($"Disposal 1 resulted in gain of {portfolio.CalculateChargeableGain(capGain4):C2}");
 Console.WriteLine("After sell 1 " + ledger.TotalProofOfActualCost(asset3).ToString("C2"));
 

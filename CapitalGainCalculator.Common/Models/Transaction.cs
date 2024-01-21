@@ -16,7 +16,6 @@ namespace CapitalGainCalculator.Common.Models
         public decimal UnitPrice {get; init;}
         public decimal NumberOfShares {get; init;}
         public decimal TransactionCosts {get; init;}
-        public abstract decimal ProofOfActualCost {get;}
         public DateTimeOffset TransactionDate {get; init;}
         protected abstract string TransactionType {get;}
         public override string ToString()

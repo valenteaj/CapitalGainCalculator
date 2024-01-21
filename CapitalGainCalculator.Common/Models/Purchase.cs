@@ -10,7 +10,5 @@ namespace CapitalGainCalculator.Common.Models
             : base(asset, purchaseDate, unitPrice, numberOfShares, transactionCosts)
         {
         }
-        
-        public override decimal ProofOfActualCost => (UnitPrice * NumberOfShares) + TransactionCosts;
     }
 }
