@@ -2,7 +2,7 @@ namespace CapitalGainCalculator.Common.Models
 {
     public struct CumulativeGainData
     {
-        public decimal Cost {get;set;}
-        public decimal NumberOfShares {get;set;}
+        public decimal TotalProofOfActualCost {get;set;}
+        public decimal TotalNumberOfShares {get;set;}
     }
 }

@@ -12,7 +12,7 @@ namespace CapitalGainCalculator.Common
             _transactions = new List<Transaction>();
         }
 
-        public decimal TotalProofOfActualCost(IAsset asset, DateTimeOffset? atTimePoint = null)
+        public CumulativeGainData GetCumulativeGainData(IAsset asset, DateTimeOffset? atTimePoint = null)
         {
             CumulativeGainData data = new CumulativeGainData();
             
@@ -24,13 +24,8 @@ namespace CapitalGainCalculator.Common
             {
                 data = transaction.Aggregate(data);
             }
-            return data.Cost;
+            return data;
         } 
-
-        public decimal TotalNumberOfShares(IAsset asset, DateTimeOffset? atTimePoint = null) => 
-            GetTransactionsByAsset(asset)
-            .Where(t => t.TransactionDate < (atTimePoint ?? DateTimeOffset.MaxValue))
-            .Sum(t => t.NumberOfShares);
 
         public void RegisterTransaction(Transaction transaction) => _transactions.Add(transaction);
         

@@ -29,8 +29,8 @@ namespace CapitalGainCalculator.Common
         public decimal CalculateChargeableGain(Disposal disposal)
         {
             var disposalProceeds = disposal.NumberOfShares * disposal.UnitPrice;
-            var totalNumberOfShares = _ledger.TotalNumberOfShares(disposal.Asset, disposal.TransactionDate);
-            var allowableCost = _ledger.TotalProofOfActualCost(disposal.Asset, disposal.TransactionDate) * disposal.NumberOfShares / totalNumberOfShares;
+            var gainData = _ledger.GetCumulativeGainData(disposal.Asset, disposal.TransactionDate);
+            var allowableCost = gainData.TotalProofOfActualCost * disposal.NumberOfShares / gainData.TotalNumberOfShares;
             
             var chargeableGain = ((disposalProceeds - allowableCost) * -1) - disposal.TransactionCosts;
             return chargeableGain;
