@@ -9,5 +9,17 @@ namespace CapitalGainCalculator.Common.Models
             : base(asset, purchaseDate, unitPrice, -numberOfShares, transactionCosts)
         {
         }
+
+        public override CumulativeGainData Aggregate(CumulativeGainData accumulator)
+        {
+            var invertedNoOfShares = NumberOfShares * -1;
+            var cumulativeCost = accumulator.Cost - (accumulator.Cost * invertedNoOfShares / accumulator.NumberOfShares);
+            var cumulativeShares = accumulator.NumberOfShares - invertedNoOfShares;
+            return new CumulativeGainData 
+            {
+                Cost = cumulativeCost,
+                NumberOfShares = cumulativeShares
+            };
+        }
     }
 }

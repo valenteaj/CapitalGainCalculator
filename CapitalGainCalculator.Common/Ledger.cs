@@ -14,8 +14,7 @@ namespace CapitalGainCalculator.Common
 
         public decimal TotalProofOfActualCost(IAsset asset, DateTimeOffset? atTimePoint = null)
         {
-            decimal cumulativeShares = 0;
-            decimal cumulativeCost = 0;
+            CumulativeGainData data = new CumulativeGainData();
             
             var assetTransactions = 
                 GetTransactionsByAsset(asset)
@@ -23,19 +22,9 @@ namespace CapitalGainCalculator.Common
 
             foreach (var transaction in assetTransactions)
             {
-                if (transaction is Purchase)
-                {
-                    cumulativeCost += transaction.UnitPrice * transaction.NumberOfShares + transaction.TransactionCosts;
-                    cumulativeShares += transaction.NumberOfShares;
-                }
-                else 
-                {
-                    var invertedNoOfShares = transaction.NumberOfShares * -1;
-                    cumulativeCost -= cumulativeCost * invertedNoOfShares / cumulativeShares;
-                    cumulativeShares -= invertedNoOfShares;
-                }
+                data = transaction.Aggregate(data);
             }
-            return cumulativeCost;
+            return data.Cost;
         } 
 
         public decimal TotalNumberOfShares(IAsset asset, DateTimeOffset? atTimePoint = null) => 
