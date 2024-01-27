@@ -107,10 +107,11 @@ Refer to LICENCE file
 - Support for multiple assets
 - Factors in fees for accurate allowance deduction
 
-# Upcoming Development
+## Upcoming Development
 - Acknowledgement of Bed and Breakfasting rules (Outside a Section 104 holding)
 - Stability improvements
 - Unit test coverage
+- Injection of IStore for ledger
 
 ## Tests
 
