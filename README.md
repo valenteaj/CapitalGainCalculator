@@ -1,4 +1,4 @@
-# HMRC UK Shares Capital Gains Tax Calculator
+# HMRC UK Shares Capital Gains Calculator
 
 ## Description
 
