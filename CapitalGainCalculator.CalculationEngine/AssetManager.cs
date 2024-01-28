@@ -7,21 +7,22 @@ namespace CapitalGainCalculator.CalculationEngine
     public class AssetManager : IAssetManager
     {
         private readonly ILedger _ledger;
+
         public AssetManager(ILedger ledger)
         {
             _ledger = ledger;
         }
 
-        public Purchase Buy(IAsset asset, decimal quantity, decimal unitPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
+        public Transaction Buy(Asset asset, decimal quantity, decimal unitPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
         {
-            var transaction = new Purchase(asset, transactionDate ?? DateTimeOffset.UtcNow, unitPrice, quantity, transactionCosts);
+            var transaction = new Transaction(asset, transactionDate ?? DateTimeOffset.UtcNow, unitPrice, quantity, transactionCosts, TransactionType.Purchase);
             _ledger.RegisterTransaction(transaction);
             return transaction;
         }
 
-        public Disposal Sell(IAsset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
+        public Transaction Sell(Asset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
         {
-            var transaction = new Disposal(asset, transactionDate ?? DateTimeOffset.UtcNow, currentPrice, quantity, transactionCosts);
+            var transaction = new Transaction(asset, transactionDate ?? DateTimeOffset.UtcNow, currentPrice, quantity, transactionCosts, TransactionType.Disposal);
             _ledger.RegisterTransaction(transaction);
             return transaction;
         }
@@ -36,9 +37,9 @@ namespace CapitalGainCalculator.CalculationEngine
             return cumulativeGain;
         }
 
-        public decimal CalculateChargeableGain(IAsset asset)
+        public decimal CalculateChargeableGain(Asset asset)
         {
-            var disposals = _ledger.GetTransactionsByAsset(asset).OfType<Disposal>();
+            var disposals = _ledger.GetTransactionsByAsset(asset).Where(transaction => transaction.TransactionType == TransactionType.Disposal);
             decimal cumulativeGain = 0;
             foreach (var disposal in disposals)
             {
@@ -47,8 +48,10 @@ namespace CapitalGainCalculator.CalculationEngine
             return cumulativeGain;
         }
 
-        public decimal CalculateChargeableGain(Disposal disposal)
+        public decimal CalculateChargeableGain(Transaction disposal)
         {
+            if (disposal.TransactionType != TransactionType.Disposal) throw new ArgumentException($"TransactionType needs to be {TransactionType.Disposal}", "disposal");
+
             var disposalProceeds = disposal.NumberOfShares * disposal.UnitPrice;
             var gainData = _ledger.GetCumulativeGainData(disposal.Asset, disposal.TransactionDate);
             var allowableCost = gainData.TotalProofOfActualCost * disposal.NumberOfShares / gainData.TotalNumberOfShares;
@@ -75,10 +78,10 @@ namespace CapitalGainCalculator.CalculationEngine
                 foreach (var transaction in assetTransactions)
                 {
                     builder.AppendLine(transaction.ToString());
-                    if (transaction is Disposal)
+                    if (transaction.TransactionType == TransactionType.Disposal)
                     {
                         totalDisposalsValue += transaction.NumberOfShares * transaction.UnitPrice;
-                        var chargeableGain = CalculateChargeableGain((Disposal)transaction);
+                        var chargeableGain = CalculateChargeableGain(transaction);
                         cumulativeChargeableGain += chargeableGain;
                         ++totalDisposals;
                         builder.AppendLine($"\tChargeable gain: {chargeableGain:C2}");

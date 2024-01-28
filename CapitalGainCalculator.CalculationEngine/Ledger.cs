@@ -1,19 +1,28 @@
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
+using CapitalGainCalculator.CalculationEngine.Services;
 
 namespace CapitalGainCalculator.CalculationEngine
 {
     public class Ledger : ILedger
     {
-        private readonly ICollection<Transaction> _transactions;
-        public Ledger()
+        private readonly ITransactionStore _transactionStore;
+        private readonly IPurchaseService _purchaseService;
+        private readonly IDisposalService _disposalService;
+
+        public Ledger(
+            ITransactionStore transactionStore,
+            IPurchaseService purchaseService,
+            IDisposalService disposalService)
         {
-            _transactions = new List<Transaction>();
+            _transactionStore = transactionStore;
+            _purchaseService = purchaseService;
+            _disposalService = disposalService;
         }
 
-        public CumulativeGainData GetCumulativeGainData(IAsset asset, DateTimeOffset? atTimePoint = null)
+        public CumulativeGainData GetCumulativeGainData(Asset asset, DateTimeOffset? atTimePoint = null)
         {
-            CumulativeGainData data = new CumulativeGainData();
+            var data = new CumulativeGainData();
             
             var assetTransactions = 
                 GetTransactionsByAsset(asset)
@@ -21,21 +30,31 @@ namespace CapitalGainCalculator.CalculationEngine
 
             foreach (var transaction in assetTransactions)
             {
-                data = transaction.Aggregate(data);
+                if (transaction.TransactionType == TransactionType.Disposal)
+                {
+                    data = _disposalService.Aggregate(transaction, data);
+                }
+                else if (transaction.TransactionType == TransactionType.Purchase)
+                {
+                    data = _purchaseService.Aggregate(transaction, data);
+                }
             }
             return data;
-        } 
+        }
 
-        public void RegisterTransaction(Transaction transaction) => _transactions.Add(transaction ?? throw new ArgumentException("No transaction provided"));
+        public void RegisterTransaction(Transaction transaction)
+        {
+            _transactionStore.Add(transaction);
+        }
         
-        public IEnumerable<Transaction> GetTransactionsByAsset(IAsset asset) => 
-            _transactions
-            .Where(t => t.Asset.Name == asset.Name)
-            .OrderBy(t => t.TransactionDate);
+        public IEnumerable<Transaction> GetTransactionsByAsset(Asset asset) =>
+            _transactionStore.Get()
+                .Where(t => t.Asset.Name == asset.Name)
+                .OrderBy(t => t.TransactionDate);
 
-        public IEnumerable<IAsset> Assets => 
-            _transactions
-            .Select(t => t.Asset)
-            .Distinct();
+        public IEnumerable<Asset> Assets =>
+            _transactionStore.Get()
+                .Select(t => t.Asset)
+                .Distinct();
     }
 }
