@@ -1,4 +1,4 @@
-namespace CapitalGainCalculator.Common.Interfaces
+namespace CapitalGainCalculator.CalculationEngine.Interfaces
 {
     public interface IAsset
     {

@@ -1,6 +1,6 @@
-﻿using CapitalGainCalculator.Common;
-using CapitalGainCalculator.Common.Interfaces;
-using CapitalGainCalculator.Common.Models;
+﻿using CapitalGainCalculator.CalculationEngine;
+using CapitalGainCalculator.CalculationEngine.Interfaces;
+using CapitalGainCalculator.CalculationEngine.Models;
 
 ILedger ledger = new Ledger();
 IAssetManager portfolio = new AssetManager(ledger);

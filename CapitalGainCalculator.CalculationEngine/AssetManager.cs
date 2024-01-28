@@ -1,8 +1,8 @@
 using System.Text;
-using CapitalGainCalculator.Common.Interfaces;
-using CapitalGainCalculator.Common.Models;
+using CapitalGainCalculator.CalculationEngine.Interfaces;
+using CapitalGainCalculator.CalculationEngine.Models;
 
-namespace CapitalGainCalculator.Common
+namespace CapitalGainCalculator.CalculationEngine
 {
     public class AssetManager : IAssetManager
     {

@@ -1,6 +1,6 @@
-using CapitalGainCalculator.Common.Interfaces;
+using CapitalGainCalculator.CalculationEngine.Interfaces;
 
-namespace CapitalGainCalculator.Common.Models
+namespace CapitalGainCalculator.CalculationEngine.Models
 {
     public class Disposal : Transaction
     {

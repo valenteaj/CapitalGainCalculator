@@ -1,4 +1,4 @@
-namespace CapitalGainCalculator.Common.Models
+namespace CapitalGainCalculator.CalculationEngine.Models
 {
     public struct CumulativeGainData
     {

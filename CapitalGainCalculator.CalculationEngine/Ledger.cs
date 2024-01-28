@@ -1,8 +1,7 @@
-using System.Text;
-using CapitalGainCalculator.Common.Interfaces;
-using CapitalGainCalculator.Common.Models;
+using CapitalGainCalculator.CalculationEngine.Interfaces;
+using CapitalGainCalculator.CalculationEngine.Models;
 
-namespace CapitalGainCalculator.Common
+namespace CapitalGainCalculator.CalculationEngine
 {
     public class Ledger : ILedger
     {
@@ -27,7 +26,7 @@ namespace CapitalGainCalculator.Common
             return data;
         } 
 
-        public void RegisterTransaction(Transaction transaction) => _transactions.Add(transaction);
+        public void RegisterTransaction(Transaction transaction) => _transactions.Add(transaction ?? throw new ArgumentException("No transaction provided"));
         
         public IEnumerable<Transaction> GetTransactionsByAsset(IAsset asset) => 
             _transactions
@@ -38,15 +37,5 @@ namespace CapitalGainCalculator.Common
             _transactions
             .Select(t => t.Asset)
             .Distinct();
-        
-        public override string ToString() 
-        {
-            var builder = new StringBuilder();
-            foreach (var transaction in _transactions)
-            {
-                builder.AppendLine(transaction.ToString());
-            }
-            return builder.ToString();
-        }
     }
 }

@@ -1,6 +1,6 @@
-using CapitalGainCalculator.Common.Models;
+using CapitalGainCalculator.CalculationEngine.Models;
 
-namespace CapitalGainCalculator.Common.Interfaces
+namespace CapitalGainCalculator.CalculationEngine.Interfaces
 {
     public interface ILedger
     {

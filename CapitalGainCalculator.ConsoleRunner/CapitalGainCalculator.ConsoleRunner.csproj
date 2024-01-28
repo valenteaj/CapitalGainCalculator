@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\CapitalGainCalculator.Common\CapitalGainCalculator.Common.csproj" />
+    <ProjectReference Include="..\CapitalGainCalculator.CalculationEngine\CapitalGainCalculator.CalculationEngine.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

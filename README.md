@@ -41,9 +41,9 @@ Total capital gains: £629
 Using `AssetManager.ToString()`
 
 ```c#
-using CapitalGainCalculator.Common;
-using CapitalGainCalculator.Common.Interfaces;
-using CapitalGainCalculator.Common.Models;
+using CapitalGainCalculator.CalculationEngine;
+using CapitalGainCalculator.CalculationEngine.Interfaces;
+using CapitalGainCalculator.CalculationEngine.Models;
 
 ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
@@ -81,9 +81,9 @@ Total Fees Paid: £435.00
 Using `IAssetManager: decimal CalculateChargeableGain(Disposal disposal)` overload
 
 ```c#
-using CapitalGainCalculator.Common;
-using CapitalGainCalculator.Common.Interfaces;
-using CapitalGainCalculator.Common.Models;
+using CapitalGainCalculator.CalculationEngine;
+using CapitalGainCalculator.CalculationEngine.Interfaces;
+using CapitalGainCalculator.CalculationEngine.Models;
 
 ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
@@ -108,9 +108,9 @@ Output:
 Using `IAssetManager: decimal CalculateChargeableGain(IAsset disposal)` overload
 
 ```c#
-using CapitalGainCalculator.Common;
-using CapitalGainCalculator.Common.Interfaces;
-using CapitalGainCalculator.Common.Models;
+using CapitalGainCalculator.CalculationEngine;
+using CapitalGainCalculator.CalculationEngine.Interfaces;
+using CapitalGainCalculator.CalculationEngine.Models;
 
 ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
@@ -135,9 +135,9 @@ Output:
 Using `IAssetManager: decimal CalculateChargeableGain()` overload
 
 ```c#
-using CapitalGainCalculator.Common;
-using CapitalGainCalculator.Common.Interfaces;
-using CapitalGainCalculator.Common.Models;
+using CapitalGainCalculator.CalculationEngine;
+using CapitalGainCalculator.CalculationEngine.Interfaces;
+using CapitalGainCalculator.CalculationEngine.Models;
 
 ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
