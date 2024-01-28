@@ -26,6 +26,27 @@ namespace CapitalGainCalculator.Common
             return transaction;
         }
 
+        public decimal CalculateChargeableGain()
+        {
+            decimal cumulativeGain = 0;
+            foreach (var asset in _ledger.Assets)
+            {
+                cumulativeGain += CalculateChargeableGain(asset);
+            }
+            return cumulativeGain;
+        }
+
+        public decimal CalculateChargeableGain(IAsset asset)
+        {
+            var disposals = _ledger.GetTransactionsByAsset(asset).OfType<Disposal>();
+            decimal cumulativeGain = 0;
+            foreach (var disposal in disposals)
+            {
+                cumulativeGain += CalculateChargeableGain(disposal);
+            }
+            return cumulativeGain;
+        }
+
         public decimal CalculateChargeableGain(Disposal disposal)
         {
             var disposalProceeds = disposal.NumberOfShares * disposal.UnitPrice;

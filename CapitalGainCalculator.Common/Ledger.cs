@@ -29,9 +29,15 @@ namespace CapitalGainCalculator.Common
 
         public void RegisterTransaction(Transaction transaction) => _transactions.Add(transaction);
         
-        public IEnumerable<Transaction> GetTransactionsByAsset(IAsset asset) => _transactions.Where(t => t.Asset.Name == asset.Name);
+        public IEnumerable<Transaction> GetTransactionsByAsset(IAsset asset) => 
+            _transactions
+            .Where(t => t.Asset.Name == asset.Name)
+            .OrderBy(t => t.TransactionDate);
 
-        public IEnumerable<IAsset> Assets => _transactions.Select(t => t.Asset).Distinct();
+        public IEnumerable<IAsset> Assets => 
+            _transactions
+            .Select(t => t.Asset)
+            .Distinct();
         
         public override string ToString() 
         {

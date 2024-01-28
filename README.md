@@ -6,7 +6,7 @@ As a UK taxpayer and a holder of shares outside of a tax efficient wrapper (Pens
 
 My motivation for building this project was to take all of the manual work out of calculating the rolling average purchase price of shares and its subsequent effect on any capital gain therefore making it easy to work out any tax owed.
 
-This currently lives as a library with a backing console app that can be modified to initialise an asset manager and ledger; register transactions and then output to the console as a gains summary. Some day, I might get around to creating a web frontend... maybe.
+This currently lives as a library with a backing console app that can be modified to initialise an asset manager and ledger; register transactions and then output to the console as a gains summary. Some day, I might get around to turning this into a web API and create a web frontend... maybe.
 
 ## Installation
 
@@ -37,6 +37,8 @@ The transactions can be summarised as follows:
 Total capital gains: £629
 
 ### Getting an Overall Summary
+
+Using `AssetManager.ToString()`
 
 ```c#
 using CapitalGainCalculator.Common;
@@ -74,7 +76,9 @@ Total Disposals: -£5,440.00 (2 transactions)
 Total Fees Paid: £435.00
 ```
 
-### Getting the Gain for a Single Transaction
+### Getting the Gain for a Single Disposal
+
+Using `IAssetManager: decimal CalculateChargeableGain(Disposal disposal)` overload
 
 ```c#
 using CapitalGainCalculator.Common;
@@ -99,9 +103,70 @@ Output:
 £329.33
 ```
 
+### Getting the Overall Gain for an Asset
+
+Using `IAssetManager: decimal CalculateChargeableGain(IAsset disposal)` overload
+
+```c#
+using CapitalGainCalculator.Common;
+using CapitalGainCalculator.Common.Interfaces;
+using CapitalGainCalculator.Common.Models;
+
+ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
+IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
+
+var asset = new Asset("HMRC HS284 Example 3");
+portfolio.Buy(asset, 1000, 4m, 150, new DateTimeOffset(new DateTime(2014, 4, 1)));
+portfolio.Buy(asset, 500, 4.10m, 80, new DateTimeOffset(new DateTime(2017, 9, 1)));
+portfolio.Sell(asset, 700, 4.8m, 100, new DateTimeOffset(new DateTime(2022, 5, 1)));
+portfolio.Sell(asset, 400, 5.2m, 105, new DateTimeOffset(new DateTime(2023, 2, 1)));
+
+var chargeableGain = portfolio.CalculateChargeableGain(asset);
+Console.WriteLine(chargeableGain.ToString("C2"));
+```
+
+Output:
+```
+£629.67
+```
+
+### Getting the Overall Gain for Entire Portfolio
+
+Using `IAssetManager: decimal CalculateChargeableGain()` overload
+
+```c#
+using CapitalGainCalculator.Common;
+using CapitalGainCalculator.Common.Interfaces;
+using CapitalGainCalculator.Common.Models;
+
+ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
+IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
+
+var asset = new Asset("HMRC HS284 Example 3");
+portfolio.Buy(asset, 1000, 4m, 150, new DateTimeOffset(new DateTime(2014, 4, 1)));
+portfolio.Buy(asset, 500, 4.10m, 80, new DateTimeOffset(new DateTime(2017, 9, 1)));
+portfolio.Sell(asset, 700, 4.8m, 100, new DateTimeOffset(new DateTime(2022, 5, 1)));
+portfolio.Sell(asset, 400, 5.2m, 105, new DateTimeOffset(new DateTime(2023, 2, 1)));
+
+var asset2 = new Asset("A Different Asset");
+portfolio.Buy(asset2, 10, 60, 3+3, new DateTimeOffset(new DateTime(2024, 1, 10)));
+portfolio.Buy(asset2, 30, 80, 3+12, new DateTimeOffset(new DateTime(2024, 1, 11)));
+portfolio.Sell(asset2, 10, 100, 3, new DateTimeOffset(new DateTime(2024, 1, 12)));
+portfolio.Buy(asset2, 10, 120, 3+6, new DateTimeOffset(new DateTime(2024, 1, 13)));
+portfolio.Sell(asset2, 10, 150, 3, new DateTimeOffset(new DateTime(2024, 1, 14)));
+
+var chargeableGain = portfolio.CalculateChargeableGain();
+Console.WriteLine(chargeableGain.ToString("C2"));
+```
+
+Output:
+```
+£1,499.73
+```
+
 ## License
 
-Refer to LICENCE file
+Refer to LICENSE file
 
 ## Features
 - Support for multiple assets
