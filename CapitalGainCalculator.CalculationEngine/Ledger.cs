@@ -11,7 +11,7 @@ namespace CapitalGainCalculator.CalculationEngine
             _transactions = new List<Transaction>();
         }
 
-        public CumulativeGainData GetCumulativeGainData(IAsset asset, DateTimeOffset? atTimePoint = null)
+        public CumulativeGainData GetCumulativeGainData(Asset asset, DateTimeOffset? atTimePoint = null)
         {
             CumulativeGainData data = new CumulativeGainData();
             
@@ -28,12 +28,12 @@ namespace CapitalGainCalculator.CalculationEngine
 
         public void RegisterTransaction(Transaction transaction) => _transactions.Add(transaction ?? throw new ArgumentException("No transaction provided"));
         
-        public IEnumerable<Transaction> GetTransactionsByAsset(IAsset asset) => 
+        public IEnumerable<Transaction> GetTransactionsByAsset(Asset asset) => 
             _transactions
             .Where(t => t.Asset.Name == asset.Name)
             .OrderBy(t => t.TransactionDate);
 
-        public IEnumerable<IAsset> Assets => 
+        public IEnumerable<Asset> Assets => 
             _transactions
             .Select(t => t.Asset)
             .Distinct();

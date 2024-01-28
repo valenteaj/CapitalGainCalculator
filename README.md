@@ -105,7 +105,7 @@ Output:
 
 ### Getting the Overall Gain for an Asset
 
-Using `IAssetManager: decimal CalculateChargeableGain(IAsset disposal)` overload
+Using `IAssetManager: decimal CalculateChargeableGain(Asset disposal)` overload
 
 ```c#
 using CapitalGainCalculator.CalculationEngine;

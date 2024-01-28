@@ -12,14 +12,14 @@ namespace CapitalGainCalculator.CalculationEngine
             _ledger = ledger;
         }
 
-        public Purchase Buy(IAsset asset, decimal quantity, decimal unitPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
+        public Purchase Buy(Asset asset, decimal quantity, decimal unitPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
         {
             var transaction = new Purchase(asset, transactionDate ?? DateTimeOffset.UtcNow, unitPrice, quantity, transactionCosts);
             _ledger.RegisterTransaction(transaction);
             return transaction;
         }
 
-        public Disposal Sell(IAsset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
+        public Disposal Sell(Asset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null)
         {
             var transaction = new Disposal(asset, transactionDate ?? DateTimeOffset.UtcNow, currentPrice, quantity, transactionCosts);
             _ledger.RegisterTransaction(transaction);
@@ -36,7 +36,7 @@ namespace CapitalGainCalculator.CalculationEngine
             return cumulativeGain;
         }
 
-        public decimal CalculateChargeableGain(IAsset asset)
+        public decimal CalculateChargeableGain(Asset asset)
         {
             var disposals = _ledger.GetTransactionsByAsset(asset).OfType<Disposal>();
             decimal cumulativeGain = 0;

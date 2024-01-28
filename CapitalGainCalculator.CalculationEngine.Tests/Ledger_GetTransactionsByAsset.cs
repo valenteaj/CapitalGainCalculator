@@ -12,10 +12,10 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
         {
             // Arrange
             ILedger ledger = new Ledger();
-            var mockAsset = new Mock<IAsset>();
+            var mockAsset = new Asset("Test Asset");
 
             // Act
-            var result = ledger.GetTransactionsByAsset(mockAsset.Object);
+            var result = ledger.GetTransactionsByAsset(mockAsset);
 
             // Assert
             result.Should().BeEmpty();
@@ -26,16 +26,16 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
         {
             // Arrange
             ILedger ledger = new Ledger();
-            var mockAsset = new Mock<IAsset>();
+            var mockAsset = new Asset("Test Asset");
             var transactionDate = new DateTimeOffset();
-            var mockPurchase = new Mock<Purchase>(mockAsset.Object, transactionDate, 1m, 1m, 0m);
-            var mockDisposal = new Mock<Disposal>(mockAsset.Object, transactionDate, 1m, 1m, 0m);
+            var mockPurchase = new Mock<Purchase>(mockAsset, transactionDate, 1m, 1m, 0m);
+            var mockDisposal = new Mock<Disposal>(mockAsset, transactionDate, 1m, 1m, 0m);
 
             ledger.RegisterTransaction(mockPurchase.Object);
             ledger.RegisterTransaction(mockDisposal.Object);
 
             // Act
-            var result = ledger.GetTransactionsByAsset(mockAsset.Object);
+            var result = ledger.GetTransactionsByAsset(mockAsset);
 
             // Assert
             result.Should().HaveCount(2);
@@ -46,20 +46,17 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
         {
             // Arrange
             ILedger ledger = new Ledger();
-            var mockAsset = new Mock<IAsset>();
-            var aDifferentAsset = new Mock<IAsset>();
+            var mockAsset = new Asset("Test Asset");
+            var aDifferentAsset = new Asset("A Different Asset");
             var transactionDate = new DateTimeOffset();
-            var mockPurchase = new Mock<Purchase>(mockAsset.Object, transactionDate, 1m, 1m, 0m);
-            var mockDisposal = new Mock<Disposal>(mockAsset.Object, transactionDate, 1m, 1m, 0m);
-            
-            mockAsset.Setup(a => a.Name).Returns("An asset");
-            aDifferentAsset.Setup(a => a.Name).Returns("A totally different asset");
+            var mockPurchase = new Mock<Purchase>(mockAsset, transactionDate, 1m, 1m, 0m);
+            var mockDisposal = new Mock<Disposal>(mockAsset, transactionDate, 1m, 1m, 0m);
 
             ledger.RegisterTransaction(mockPurchase.Object);
             ledger.RegisterTransaction(mockDisposal.Object);
 
             // Act
-            var result = ledger.GetTransactionsByAsset(aDifferentAsset.Object);
+            var result = ledger.GetTransactionsByAsset(aDifferentAsset);
 
             // Assert
             result.Should().BeEmpty();

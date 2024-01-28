@@ -1,12 +1,10 @@
-using CapitalGainCalculator.CalculationEngine.Interfaces;
-
 namespace CapitalGainCalculator.CalculationEngine.Models
 {
     public class Purchase : Transaction
     {
-        protected override string TransactionType => "Purchase";
+        protected override TransactionType TransactionType => TransactionType.Purchase;
 
-        public Purchase(IAsset asset, DateTimeOffset purchaseDate, decimal unitPrice, decimal numberOfShares, decimal transactionCosts) 
+        public Purchase(Asset asset, DateTimeOffset purchaseDate, decimal unitPrice, decimal numberOfShares, decimal transactionCosts) 
             : base(asset, purchaseDate, unitPrice, numberOfShares, transactionCosts)
         {
         }

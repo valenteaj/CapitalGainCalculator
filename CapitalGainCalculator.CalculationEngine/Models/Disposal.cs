@@ -1,12 +1,10 @@
-using CapitalGainCalculator.CalculationEngine.Interfaces;
-
 namespace CapitalGainCalculator.CalculationEngine.Models
 {
     public class Disposal : Transaction
     {
-        protected override string TransactionType => "Disposal";
+        protected override TransactionType TransactionType => TransactionType.Disposal;
 
-        public Disposal(IAsset asset, DateTimeOffset purchaseDate, decimal unitPrice, decimal numberOfShares, decimal transactionCosts) 
+        public Disposal(Asset asset, DateTimeOffset purchaseDate, decimal unitPrice, decimal numberOfShares, decimal transactionCosts) 
             : base(asset, purchaseDate, unitPrice, -numberOfShares, transactionCosts)
         {
         }

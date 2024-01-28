@@ -1,8 +1,6 @@
-using CapitalGainCalculator.CalculationEngine.Interfaces;
-
 namespace CapitalGainCalculator.CalculationEngine.Models
 {
-    public class Asset : IAsset
+    public class Asset
     {
         public string Name {get;init;}
         public Asset(string name)

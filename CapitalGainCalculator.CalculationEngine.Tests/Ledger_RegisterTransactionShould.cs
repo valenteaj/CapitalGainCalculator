@@ -13,8 +13,8 @@ public class Ledger_RegisterTransactionShould
         // Arrange
         ILedger ledger = new Ledger();
         var transactionDate = new DateTimeOffset();
-        var mockAsset = new Mock<IAsset>();
-        Transaction t = new Purchase(mockAsset.Object, transactionDate, 1, 1, 0);
+        var mockAsset = new Asset("Test Asset");
+        Transaction t = new Purchase(mockAsset, transactionDate, 1, 1, 0);
 
         // Act
         var fn = () => ledger.RegisterTransaction(t);
@@ -28,7 +28,7 @@ public class Ledger_RegisterTransactionShould
     {
         // Arrange
         ILedger ledger = new Ledger();
-        var mockAsset = new Mock<IAsset>();
+        var mockAsset = new Mock<Asset>();
 
         // Act
         var fn = () => ledger.RegisterTransaction(null);

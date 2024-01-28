@@ -12,10 +12,10 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
         {
             // Arrange
             ILedger ledger = new Ledger();
-            var mockAsset = new Mock<IAsset>();
+            var mockAsset = new Asset("Test Asset");
 
             // Act
-            var result = ledger.GetCumulativeGainData(mockAsset.Object);
+            var result = ledger.GetCumulativeGainData(mockAsset);
 
             // Assert
             result.TotalNumberOfShares.Should().Be(0);
@@ -27,9 +27,9 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
         {
             // Arrange
             ILedger ledger = new Ledger();
-            var mockAsset = new Mock<IAsset>();
+            var mockAsset = new Asset("Test Asset");
             var transactionDate = new DateTimeOffset();
-            var mockPurchase = new Mock<Purchase>(mockAsset.Object, transactionDate, 1m, 1m, 0m);
+            var mockPurchase = new Mock<Purchase>(mockAsset, transactionDate, 1m, 1m, 0m);
             mockPurchase.Setup((p) => p.Aggregate(new CumulativeGainData()))
                 .Returns(new CumulativeGainData 
                 {
@@ -37,7 +37,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
                     TotalProofOfActualCost = 300m
                 });
 
-            var mockDisposal = new Mock<Disposal>(mockAsset.Object, transactionDate, 1m, 1m, 0m);
+            var mockDisposal = new Mock<Disposal>(mockAsset, transactionDate, 1m, 1m, 0m);
             mockDisposal.Setup((p) => p.Aggregate(new CumulativeGainData
                 {
                     TotalNumberOfShares = 1m,
@@ -53,7 +53,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             ledger.RegisterTransaction(mockDisposal.Object);
 
             // Act
-            var result = ledger.GetCumulativeGainData(mockAsset.Object);
+            var result = ledger.GetCumulativeGainData(mockAsset);
 
             // Assert
             result.Should().Be(new CumulativeGainData
