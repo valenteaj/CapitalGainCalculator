@@ -2,16 +2,20 @@ using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
 using FluentAssertions;
 using Moq;
+using Moq.AutoMock;
 
 namespace CapitalGainCalculator.CalculationEngine.Tests;
 
 public class Ledger_RegisterTransactionShould
 {
+    private AutoMocker _mocker = new();
     [Fact]
     public void RegisterTransaction_CalledWithTransaction_AddsTransactionToCollection()
     {
         // Arrange
-        ILedger ledger = new Ledger();
+        var transactions = Enumerable.Empty<Transaction>();
+        _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
+        var ledger = _mocker.CreateInstance<Ledger>();
         var transactionDate = new DateTimeOffset();
         var mockAsset = new Asset("Test Asset");
         Transaction t = new Purchase(mockAsset, transactionDate, 1, 1, 0);
@@ -27,7 +31,9 @@ public class Ledger_RegisterTransactionShould
     public void RegisterTransaction_CalledWithNull_ThrowsArgumentException()
     {
         // Arrange
-        ILedger ledger = new Ledger();
+        var transactions = Enumerable.Empty<Transaction>();
+        _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Add(null)).Throws<ArgumentException>();
+        var ledger = _mocker.CreateInstance<Ledger>();
         var mockAsset = new Mock<Asset>();
 
         // Act

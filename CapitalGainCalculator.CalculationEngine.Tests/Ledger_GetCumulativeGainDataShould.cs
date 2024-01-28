@@ -2,16 +2,21 @@ using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
 using FluentAssertions;
 using Moq;
+using Moq.AutoMock;
 
 namespace CapitalGainCalculator.CalculationEngine.Tests
 {
     public class Ledger_GetCumulativeGainDataShould
     {
+        private AutoMocker _mocker = new();
+
         [Fact]
         public void GetCumulativeGainData_WhenNoTransactions_ReturnsZeroedGainData()
         {
             // Arrange
-            ILedger ledger = new Ledger();
+            var transactions = Enumerable.Empty<Transaction>();
+            _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
+            var ledger = _mocker.CreateInstance<Ledger>();
             var mockAsset = new Asset("Test Asset");
 
             // Act
@@ -26,7 +31,6 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
         public void GetCumulativeGainData_WithTransactions_BuildsAggregate()
         {
             // Arrange
-            ILedger ledger = new Ledger();
             var mockAsset = new Asset("Test Asset");
             var transactionDate = new DateTimeOffset();
             var mockPurchase = new Mock<Purchase>(mockAsset, transactionDate, 1m, 1m, 0m);
@@ -48,9 +52,9 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
                     TotalNumberOfShares = 2m,
                     TotalProofOfActualCost = 400m
                 });
-
-            ledger.RegisterTransaction(mockPurchase.Object);
-            ledger.RegisterTransaction(mockDisposal.Object);
+            var transactions = new Transaction[] { mockPurchase.Object, mockDisposal.Object };
+            _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
+            var ledger = _mocker.CreateInstance<Ledger>();
 
             // Act
             var result = ledger.GetCumulativeGainData(mockAsset);

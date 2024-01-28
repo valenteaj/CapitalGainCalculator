@@ -5,10 +5,10 @@ namespace CapitalGainCalculator.CalculationEngine
 {
     public class Ledger : ILedger
     {
-        private readonly ICollection<Transaction> _transactions;
-        public Ledger()
+        private readonly IStore<Transaction> _transactionStore;
+        public Ledger(IStore<Transaction> transactionStore)
         {
-            _transactions = new List<Transaction>();
+            _transactionStore = transactionStore;
         }
 
         public CumulativeGainData GetCumulativeGainData(Asset asset, DateTimeOffset? atTimePoint = null)
@@ -26,15 +26,15 @@ namespace CapitalGainCalculator.CalculationEngine
             return data;
         } 
 
-        public void RegisterTransaction(Transaction transaction) => _transactions.Add(transaction ?? throw new ArgumentException("No transaction provided"));
+        public void RegisterTransaction(Transaction transaction) => _transactionStore.Add(transaction);
         
         public IEnumerable<Transaction> GetTransactionsByAsset(Asset asset) => 
-            _transactions
+            _transactionStore.Get()
             .Where(t => t.Asset.Name == asset.Name)
             .OrderBy(t => t.TransactionDate);
 
         public IEnumerable<Asset> Assets => 
-            _transactions
+            _transactionStore.Get()
             .Select(t => t.Asset)
             .Distinct();
     }

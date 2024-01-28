@@ -45,7 +45,8 @@ using CapitalGainCalculator.CalculationEngine;
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
 
-ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
+IStore<Transaction> store = new TransactionStore();
+ILedger ledger = new Ledger(store); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
 var asset = new Asset("HMRC HS284 Example 3");
@@ -85,7 +86,8 @@ using CapitalGainCalculator.CalculationEngine;
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
 
-ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
+IStore<Transaction> store = new TransactionStore();
+ILedger ledger = new Ledger(store); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
 var asset = new Asset("HMRC HS284 Example 3");
@@ -112,7 +114,8 @@ using CapitalGainCalculator.CalculationEngine;
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
 
-ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
+IStore<Transaction> store = new TransactionStore();
+ILedger ledger = new Ledger(store); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
 var asset = new Asset("HMRC HS284 Example 3");
@@ -139,7 +142,8 @@ using CapitalGainCalculator.CalculationEngine;
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
 
-ILedger ledger = new Ledger(); // Ledger keeps a record of transactions for all assets
+IStore<Transaction> store = new TransactionStore();
+ILedger ledger = new Ledger(store); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
 var asset = new Asset("HMRC HS284 Example 3");
@@ -176,7 +180,6 @@ Refer to LICENSE file
 - Acknowledgement of Bed and Breakfasting rules (Outside a Section 104 holding)
 - Stability improvements
 - Unit test coverage
-- Injection of IStore for ledger
 
 ## Tests
 

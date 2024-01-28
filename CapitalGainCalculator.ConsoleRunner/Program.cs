@@ -2,7 +2,8 @@
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
 
-ILedger ledger = new Ledger();
+IStore<Transaction> store = new TransactionStore();
+ILedger ledger = new Ledger(store);
 IAssetManager portfolio = new AssetManager(ledger);
 
 var asset = new Asset("A test asset");
