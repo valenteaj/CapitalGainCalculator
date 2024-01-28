@@ -1,9 +1,13 @@
 ﻿using CapitalGainCalculator.CalculationEngine;
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
+using CapitalGainCalculator.CalculationEngine.Services;
 
-ILedger ledger = new Ledger();
-IAssetManager portfolio = new AssetManager(ledger);
+ITransactionStore transactionStore = new MemoryTransactionStore();
+IPurchaseService purchaseService = new PurchaseService();
+IDisposalService disposalService = new DisposalService();
+ILedger ledger = new Ledger(transactionStore, purchaseService, disposalService);
+AssetManager portfolio = new AssetManager(ledger);
 
 var asset = new Asset("A test asset");
 portfolio.Buy(asset, 10, 60m, 3+3, new DateTimeOffset(new DateTime(2024, 1, 10)));

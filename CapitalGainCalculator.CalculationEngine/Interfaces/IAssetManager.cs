@@ -13,7 +13,7 @@ namespace CapitalGainCalculator.CalculationEngine.Interfaces
         /// <param name="transactionCosts">Total transaction costs associated with this purchase (Platform, stamp duty, etc)</param>
         /// <param name="transactionDate">The datetime of the transaction (Optional)</param>
         /// <returns>A <see cref="Purchase"/> instance crystalising the transaction</returns>
-        public Purchase Buy(IAsset asset, decimal quantity, decimal unitPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null);
+        public Transaction Buy(Asset asset, decimal quantity, decimal unitPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null);
         
         /// <summary>
         /// Registers a <see cref="Disposal"/> transaction into the portfolio
@@ -24,7 +24,7 @@ namespace CapitalGainCalculator.CalculationEngine.Interfaces
         /// <param name="transactionCosts">Total transaction costs associated with this disposal (Platform, etc)</param>
         /// <param name="transactionDate">The datetime of the transaction (Optional)</param>
         /// <returns>A <see cref="Disposal"/> instance crystalising the transaction</returns>
-        public Disposal Sell(IAsset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null);
+        public Transaction Sell(Asset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null);
         
         /// <summary>
         /// Calculate chargeable gain for an entire portfolio
@@ -37,13 +37,13 @@ namespace CapitalGainCalculator.CalculationEngine.Interfaces
         /// </summary>
         /// <param name="disposal">The disposal to calculate gain on</param>
         /// <returns>Chargeable gain expressed as currency</returns>
-        public decimal CalculateChargeableGain(Disposal disposal);
+        public decimal CalculateChargeableGain(Transaction disposal);
 
         /// <summary>
         /// Calculate chargeable gain for a particular asset
         /// </summary>
         /// <param name="asset">The asset to calculate total gain on</param>
         /// <returns>Total chargeable gain expressed as currency</returns>
-        public decimal CalculateChargeableGain(IAsset asset);
+        public decimal CalculateChargeableGain(Asset asset);
     }
 }
