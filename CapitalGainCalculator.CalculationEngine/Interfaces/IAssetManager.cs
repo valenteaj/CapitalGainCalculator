@@ -5,7 +5,7 @@ namespace CapitalGainCalculator.CalculationEngine.Interfaces
     public interface IAssetManager
     {
         /// <summary>
-        /// Registers a <see cref="Purchase"/> transaction into the portfolio
+        /// Registers a purchase <see cref="Transaction"/> into the portfolio
         /// </summary>
         /// <param name="asset">The asset the purchase is attributed to</param>
         /// <param name="quantity">The number of shares of this asset being purchased</param>
@@ -13,10 +13,10 @@ namespace CapitalGainCalculator.CalculationEngine.Interfaces
         /// <param name="transactionCosts">Total transaction costs associated with this purchase (Platform, stamp duty, etc)</param>
         /// <param name="transactionDate">The datetime of the transaction (Optional)</param>
         /// <returns>A <see cref="Purchase"/> instance crystalising the transaction</returns>
-        public Purchase Buy(Asset asset, decimal quantity, decimal unitPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null);
+        public Transaction Buy(Asset asset, decimal quantity, decimal unitPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null);
         
         /// <summary>
-        /// Registers a <see cref="Disposal"/> transaction into the portfolio
+        /// Registers a dispsal <see cref="Transaction"/> into the portfolio
         /// </summary>
         /// <param name="asset">The asset the disposal is attributed to</param>
         /// <param name="quantity">The number of shares of this asset being disposed of</param>
@@ -24,7 +24,7 @@ namespace CapitalGainCalculator.CalculationEngine.Interfaces
         /// <param name="transactionCosts">Total transaction costs associated with this disposal (Platform, etc)</param>
         /// <param name="transactionDate">The datetime of the transaction (Optional)</param>
         /// <returns>A <see cref="Disposal"/> instance crystalising the transaction</returns>
-        public Disposal Sell(Asset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null);
+        public Transaction Sell(Asset asset, decimal quantity, decimal currentPrice, decimal transactionCosts, DateTimeOffset? transactionDate = null);
         
         /// <summary>
         /// Calculate chargeable gain for an entire portfolio
@@ -37,7 +37,7 @@ namespace CapitalGainCalculator.CalculationEngine.Interfaces
         /// </summary>
         /// <param name="disposal">The disposal to calculate gain on</param>
         /// <returns>Chargeable gain expressed as currency</returns>
-        public decimal CalculateChargeableGain(Disposal disposal);
+        public decimal CalculateChargeableGain(Transaction disposal);
 
         /// <summary>
         /// Calculate chargeable gain for a particular asset

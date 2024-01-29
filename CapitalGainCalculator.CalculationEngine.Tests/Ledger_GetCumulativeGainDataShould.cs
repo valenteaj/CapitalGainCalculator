@@ -1,5 +1,6 @@
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
+using CapitalGainCalculator.CalculationEngine.Strategies;
 using FluentAssertions;
 using Moq;
 using Moq.AutoMock;
@@ -33,27 +34,12 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             // Arrange
             var mockAsset = new Asset("Test Asset");
             var transactionDate = new DateTimeOffset();
-            var mockPurchase = new Mock<Purchase>(mockAsset, transactionDate, 1m, 1m, 0m);
-            mockPurchase.Setup((p) => p.Aggregate(new CumulativeGainData()))
-                .Returns(new CumulativeGainData 
-                {
-                    TotalNumberOfShares = 1m,
-                    TotalProofOfActualCost = 300m
-                });
-
-            var mockDisposal = new Mock<Disposal>(mockAsset, transactionDate, 1m, 1m, 0m);
-            mockDisposal.Setup((p) => p.Aggregate(new CumulativeGainData
-                {
-                    TotalNumberOfShares = 1m,
-                    TotalProofOfActualCost = 300m
-                }))
-                .Returns(new CumulativeGainData 
-                {
-                    TotalNumberOfShares = 2m,
-                    TotalProofOfActualCost = 400m
-                });
-            var transactions = new Transaction[] { mockPurchase.Object, mockDisposal.Object };
+            var purchase = new Transaction(TransactionType.Purchase, mockAsset, transactionDate, 1m, 1m, 0m);
+            var disposal = new Transaction(TransactionType.Disposal, mockAsset, transactionDate, 1m, -1m, 0m);
+            var transactions = new Transaction[] { purchase, disposal };
+            var strategies = new List<ITransactionStrategy> { new PurchaseStrategy(), new DisposalStrategy() };
             _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
+            _mocker.Use<IEnumerable<ITransactionStrategy>>(strategies);
             var ledger = _mocker.CreateInstance<Ledger>();
 
             // Act
@@ -62,11 +48,9 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             // Assert
             result.Should().Be(new CumulativeGainData
             {
-                TotalNumberOfShares = 2m,
-                TotalProofOfActualCost = 400m
+                TotalNumberOfShares = 0m,
+                TotalProofOfActualCost = 0m
             });
-            mockPurchase.Verify(d => d.Aggregate(It.IsAny<CumulativeGainData>()), Times.Once);
-            mockDisposal.Verify(d => d.Aggregate(It.IsAny<CumulativeGainData>()), Times.Once);
         }
     }
 }

@@ -46,7 +46,8 @@ using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
 
 IStore<Transaction> store = new TransactionStore();
-ILedger ledger = new Ledger(store); // Ledger keeps a record of transactions for all assets
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+ILedger ledger = new Ledger(store, strategies); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
 var asset = new Asset("HMRC HS284 Example 3");
@@ -85,9 +86,11 @@ Using `IAssetManager: decimal CalculateChargeableGain(Disposal disposal)` overlo
 using CapitalGainCalculator.CalculationEngine;
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
+using CapitalGainCalculator.CalculationEngine.Strategies;
 
 IStore<Transaction> store = new TransactionStore();
-ILedger ledger = new Ledger(store); // Ledger keeps a record of transactions for all assets
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+ILedger ledger = new Ledger(store, strategies); = new Ledger(store); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
 var asset = new Asset("HMRC HS284 Example 3");
@@ -113,9 +116,11 @@ Using `IAssetManager: decimal CalculateChargeableGain(Asset disposal)` overload
 using CapitalGainCalculator.CalculationEngine;
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
+using CapitalGainCalculator.CalculationEngine.Strategies;
 
 IStore<Transaction> store = new TransactionStore();
-ILedger ledger = new Ledger(store); // Ledger keeps a record of transactions for all assets
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+ILedger ledger = new Ledger(store, strategies); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
 var asset = new Asset("HMRC HS284 Example 3");
@@ -141,9 +146,11 @@ Using `IAssetManager: decimal CalculateChargeableGain()` overload
 using CapitalGainCalculator.CalculationEngine;
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
+using CapitalGainCalculator.CalculationEngine.Strategies;
 
 IStore<Transaction> store = new TransactionStore();
-ILedger ledger = new Ledger(store); // Ledger keeps a record of transactions for all assets
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+ILedger ledger = new Ledger(store, strategies); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
 var asset = new Asset("HMRC HS284 Example 3");
