@@ -18,7 +18,7 @@ public class Ledger_RegisterTransactionShould
         var ledger = _mocker.CreateInstance<Ledger>();
         var transactionDate = new DateTimeOffset();
         var mockAsset = new Asset("Test Asset");
-        Transaction t = new Purchase(mockAsset, transactionDate, 1, 1, 0);
+        var t = new Transaction(TransactionType.Purchase, mockAsset, transactionDate, 1, 1, 0);
 
         // Act
         var fn = () => ledger.RegisterTransaction(t);

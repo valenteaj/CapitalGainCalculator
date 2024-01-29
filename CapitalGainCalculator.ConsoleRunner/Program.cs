@@ -1,9 +1,11 @@
 ﻿using CapitalGainCalculator.CalculationEngine;
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
+using CapitalGainCalculator.CalculationEngine.Strategies;
 
 IStore<Transaction> store = new TransactionStore();
-ILedger ledger = new Ledger(store);
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+ILedger ledger = new Ledger(store, strategies);
 IAssetManager portfolio = new AssetManager(ledger);
 
 var asset = new Asset("A test asset");

@@ -1,14 +1,17 @@
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
+using CapitalGainCalculator.CalculationEngine.Strategies;
 
 namespace CapitalGainCalculator.CalculationEngine
 {
     public class Ledger : ILedger
     {
         private readonly IStore<Transaction> _transactionStore;
-        public Ledger(IStore<Transaction> transactionStore)
+        private readonly TransactionStrategyCoordinator _context;
+        public Ledger(IStore<Transaction> transactionStore, IEnumerable<ITransactionStrategy> transactionStrategies)
         {
             _transactionStore = transactionStore;
+            _context = new TransactionStrategyCoordinator(transactionStrategies);
         }
 
         public CumulativeGainData GetCumulativeGainData(Asset asset, DateTimeOffset? atTimePoint = null)
@@ -21,7 +24,8 @@ namespace CapitalGainCalculator.CalculationEngine
 
             foreach (var transaction in assetTransactions)
             {
-                data = transaction.Aggregate(data);
+                _context.SetStrategy(transaction.TransactionType);
+                data = _context.ExecuteAggregate(transaction, data);
             }
             return data;
         } 
