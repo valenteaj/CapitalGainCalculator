@@ -4,7 +4,7 @@ using CapitalGainCalculator.CalculationEngine.Models;
 using CapitalGainCalculator.CalculationEngine.Strategies;
 
 IStore<Transaction> store = new TransactionStore();
-var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy() };
 ILedger ledger = new Ledger(store, strategies);
 IAssetManager portfolio = new AssetManager(ledger);
 

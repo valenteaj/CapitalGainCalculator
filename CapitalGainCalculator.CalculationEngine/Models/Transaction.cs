@@ -7,7 +7,7 @@ namespace CapitalGainCalculator.CalculationEngine.Models
             TransactionDate = transactionDate;
             Asset = asset ?? throw new ArgumentException("Transaction must be associated with an asset", "asset");
             UnitPrice = unitPrice;
-            NumberOfShares = transactionType == TransactionType.Disposal && numberOfShares > 0 ? numberOfShares * -1 : numberOfShares;;
+            NumberOfShares = NormaliseNumberOfShares(numberOfShares, transactionType);
             TransactionCosts = transactionCosts;
             TransactionType = transactionType;
         }
@@ -17,6 +17,13 @@ namespace CapitalGainCalculator.CalculationEngine.Models
         public decimal TransactionCosts {get; init;}
         public DateTimeOffset TransactionDate {get; init;}
         public TransactionType TransactionType {get; init;}
+
+        private decimal NormaliseNumberOfShares(decimal numberOfShares, TransactionType transactionType) => transactionType switch
+        {
+            TransactionType.Disposal when numberOfShares > 0 => numberOfShares * -1,
+            TransactionType.Purchase when numberOfShares < 0 => numberOfShares * -1,
+            _ => numberOfShares
+        };
 
         public override string ToString()
         {

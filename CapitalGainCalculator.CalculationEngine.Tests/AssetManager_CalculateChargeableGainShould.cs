@@ -37,7 +37,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             mockLedger.Setup(_ => _.GetCumulativeGainData(asset, timestamp)).Returns(mockGainData);
             var classUnderTest = new AssetManager(mockLedger.Object);
 
-            var transaction = new Transaction(TransactionType.Disposal, asset, timestamp, 10, -1, 0);
+            var transaction = new Transaction(TransactionType.Disposal, asset, timestamp, 10m, -1m, 0);
 
             // Act
             var fn = () => classUnderTest.CalculateChargeableGain(transaction);
@@ -120,15 +120,15 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
 
             var testTransactions = new[] 
             {
-                new Transaction(TransactionType.Purchase, asset, timestamp, 1, 1, 0),
-                new Transaction(TransactionType.Disposal, asset, timestamp, 2, 1, 0),
+                new Transaction(TransactionType.Purchase, asset, timestamp, 1m, 1m, 0),
+                new Transaction(TransactionType.Disposal, asset, timestamp, 2m, 1m, 0),
             };
             
             mockLedger.Setup(_ => _.GetCumulativeGainData(asset, timestamp))
                 .Returns(new CumulativeGainData
                 {
-                    TotalNumberOfShares = 1,
-                    TotalProofOfActualCost = 1
+                    TotalNumberOfShares = 1m,
+                    TotalProofOfActualCost = 1m
                 });
             mockLedger.Setup(_ => _.GetTransactionsByAsset(asset)).Returns(testTransactions);
             var classUnderTest = new AssetManager(mockLedger.Object);
@@ -190,28 +190,28 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
 
             var testTransactionsForAsset1 = new[] 
             {
-                new Transaction(TransactionType.Purchase, asset1, timestamp, 1, 1, 0),
-                new Transaction(TransactionType.Disposal, asset1, timestamp, 2, 1, 0),
+                new Transaction(TransactionType.Purchase, asset1, timestamp, 1m, 1m, 0),
+                new Transaction(TransactionType.Disposal, asset1, timestamp, 2m, 1m, 0),
             };
 
             var testTransactionsForAsset2 = new[] 
             {
-                new Transaction(TransactionType.Purchase, asset2, timestamp, 1, 1, 0),
-                new Transaction(TransactionType.Disposal, asset2, timestamp, 2, 1, 0),
+                new Transaction(TransactionType.Purchase, asset2, timestamp, 1m, 1m, 0),
+                new Transaction(TransactionType.Disposal, asset2, timestamp, 2m, 1m, 0),
             };
             
             mockLedger.Setup(_ => _.GetCumulativeGainData(asset1, timestamp))
                 .Returns(new CumulativeGainData
                 {
-                    TotalNumberOfShares = 1,
-                    TotalProofOfActualCost = 1
+                    TotalNumberOfShares = 1m,
+                    TotalProofOfActualCost = 1m
                 });
 
             mockLedger.Setup(_ => _.GetCumulativeGainData(asset2, timestamp))
                 .Returns(new CumulativeGainData
                 {
-                    TotalNumberOfShares = 1,
-                    TotalProofOfActualCost = 1
+                    TotalNumberOfShares = 1m,
+                    TotalProofOfActualCost = 1m
                 });
                         
             mockLedger.Setup(_ => _.GetTransactionsByAsset(asset1)).Returns(testTransactionsForAsset1);

@@ -46,7 +46,7 @@ using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
 
 IStore<Transaction> store = new TransactionStore();
-var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy() };
 ILedger ledger = new Ledger(store, strategies); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
@@ -89,7 +89,7 @@ using CapitalGainCalculator.CalculationEngine.Models;
 using CapitalGainCalculator.CalculationEngine.Strategies;
 
 IStore<Transaction> store = new TransactionStore();
-var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy() };
 ILedger ledger = new Ledger(store, strategies); = new Ledger(store); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
@@ -119,7 +119,7 @@ using CapitalGainCalculator.CalculationEngine.Models;
 using CapitalGainCalculator.CalculationEngine.Strategies;
 
 IStore<Transaction> store = new TransactionStore();
-var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy() };
 ILedger ledger = new Ledger(store, strategies); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
@@ -149,7 +149,7 @@ using CapitalGainCalculator.CalculationEngine.Models;
 using CapitalGainCalculator.CalculationEngine.Strategies;
 
 IStore<Transaction> store = new TransactionStore();
-var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy()};
+var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy() };
 ILedger ledger = new Ledger(store, strategies); // Ledger keeps a record of transactions for all assets
 IAssetManager portfolio = new AssetManager(ledger); // AssetManager facilitates the purchase/sale of a given asset
 
@@ -186,8 +186,13 @@ Refer to LICENSE file
 ## Upcoming Development
 - Acknowledgement of Bed and Breakfasting rules (Outside a Section 104 holding)
 - Stability improvements
-- Unit test coverage
 
 ## Tests
 
-TBA
+### Unit Tests
+Unit tests written using the XUnit testing framework, supplemented by Moq and FluentAssertions extensions.
+
+Tests can be run from the command line under the solution directory as follows:
+```shell
+valenteaj@Latitude-E5450:~/source/CapitalGainCalculator$ dotnet test
+```

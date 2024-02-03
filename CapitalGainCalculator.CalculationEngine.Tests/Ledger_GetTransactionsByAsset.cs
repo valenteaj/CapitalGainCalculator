@@ -31,7 +31,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             var mockAsset = new Asset("Test Asset");
             var transactionDate = new DateTimeOffset();
             var purchase = new Transaction(TransactionType.Purchase, mockAsset, transactionDate, 1m, 1m, 0m);
-            var disposal = new Transaction(TransactionType.Disposal, mockAsset, transactionDate, 1m, 1m, 0m);
+            var disposal = new Transaction(TransactionType.Disposal, mockAsset, transactionDate, 1m, -1m, 0m);
             var transactions = new Transaction[] { purchase, disposal };
 
             _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
@@ -52,7 +52,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             var mockAsset = new Asset("Test Asset");
             var transactionDate = new DateTimeOffset();
             var purchase = new Transaction(TransactionType.Purchase, mockAsset, transactionDate, 1m, 1m, 0m);
-            var disposal = new Transaction(TransactionType.Disposal, mockAsset, transactionDate, 1m, 1m, 0m);
+            var disposal = new Transaction(TransactionType.Disposal, mockAsset, transactionDate, 1m, -1m, 0m);
             var transactions = new Transaction[] { purchase, disposal };
             _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
             var classUnderTest = _mocker.CreateInstance<Ledger>();
