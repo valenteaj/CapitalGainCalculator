@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapitalGainCalculator.Calcu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapitalGainCalculator.CalculationEngine.Tests", "CapitalGainCalculator.CalculationEngine.Tests\CapitalGainCalculator.CalculationEngine.Tests.csproj", "{516555BE-B821-46B6-8D97-101CF250E076}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapitalGainCalculator.Service.Web", "CapitalGainCalculator.Service.Web\CapitalGainCalculator.Service.Web.csproj", "{B16DD839-BF14-47B0-A446-0CDC5D961E3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{516555BE-B821-46B6-8D97-101CF250E076}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{516555BE-B821-46B6-8D97-101CF250E076}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{516555BE-B821-46B6-8D97-101CF250E076}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B16DD839-BF14-47B0-A446-0CDC5D961E3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B16DD839-BF14-47B0-A446-0CDC5D961E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B16DD839-BF14-47B0-A446-0CDC5D961E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B16DD839-BF14-47B0-A446-0CDC5D961E3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
