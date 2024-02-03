@@ -5,9 +5,9 @@ namespace CapitalGainCalculator.CalculationEngine.Models
         public Transaction(TransactionType transactionType, Asset asset, DateTimeOffset transactionDate, decimal unitPrice, decimal numberOfShares, decimal transactionCosts)
         {
             TransactionDate = transactionDate;
-            Asset = asset;
+            Asset = asset ?? throw new ArgumentException("Transaction must be associated with an asset", "asset");
             UnitPrice = unitPrice;
-            NumberOfShares = numberOfShares;
+            NumberOfShares = transactionType == TransactionType.Disposal && numberOfShares > 0 ? numberOfShares * -1 : numberOfShares;;
             TransactionCosts = transactionCosts;
             TransactionType = transactionType;
         }

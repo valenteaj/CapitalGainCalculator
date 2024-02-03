@@ -15,13 +15,13 @@ public class Ledger_RegisterTransactionShould
         // Arrange
         var transactions = Enumerable.Empty<Transaction>();
         _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
-        var ledger = _mocker.CreateInstance<Ledger>();
+        var classUnderTest = _mocker.CreateInstance<Ledger>();
         var transactionDate = new DateTimeOffset();
         var mockAsset = new Asset("Test Asset");
         var t = new Transaction(TransactionType.Purchase, mockAsset, transactionDate, 1, 1, 0);
 
         // Act
-        var fn = () => ledger.RegisterTransaction(t);
+        var fn = () => classUnderTest.RegisterTransaction(t);
 
         // Assert
         fn.Should().NotThrow();
@@ -33,11 +33,11 @@ public class Ledger_RegisterTransactionShould
         // Arrange
         var transactions = Enumerable.Empty<Transaction>();
         _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Add(null)).Throws<ArgumentException>();
-        var ledger = _mocker.CreateInstance<Ledger>();
+        var classUnderTest = _mocker.CreateInstance<Ledger>();
         var mockAsset = new Mock<Asset>();
 
         // Act
-        var fn = () => ledger.RegisterTransaction(null);
+        var fn = () => classUnderTest.RegisterTransaction(null);
 
         // Assert
         fn.Should().ThrowExactly<ArgumentException>();
