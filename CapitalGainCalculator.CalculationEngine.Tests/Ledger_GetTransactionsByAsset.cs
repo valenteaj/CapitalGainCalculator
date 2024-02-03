@@ -1,6 +1,5 @@
 using CapitalGainCalculator.CalculationEngine.Interfaces;
 using CapitalGainCalculator.CalculationEngine.Models;
-using CapitalGainCalculator.CalculationEngine.Strategies;
 using FluentAssertions;
 using Moq.AutoMock;
 
@@ -19,10 +18,10 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             var mockAsset = new Asset("Test Asset");
 
             // Act
-            var result = ledger.GetTransactionsByAsset(mockAsset);
+            var classUnderTest = ledger.GetTransactionsByAsset(mockAsset);
 
             // Assert
-            result.Should().BeEmpty();
+            classUnderTest.Should().BeEmpty();
         }
 
         [Fact]
@@ -36,10 +35,10 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             var transactions = new Transaction[] { purchase, disposal };
 
             _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
-            var ledger = _mocker.CreateInstance<Ledger>();
+            var classUnderTest = _mocker.CreateInstance<Ledger>();
 
             // Act
-            var result = ledger.GetTransactionsByAsset(mockAsset);
+            var result = classUnderTest.GetTransactionsByAsset(mockAsset);
 
             // Assert
             result.Should().HaveCount(2);
@@ -56,11 +55,11 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             var disposal = new Transaction(TransactionType.Disposal, mockAsset, transactionDate, 1m, 1m, 0m);
             var transactions = new Transaction[] { purchase, disposal };
             _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
-            var ledger = _mocker.CreateInstance<Ledger>();
+            var classUnderTest = _mocker.CreateInstance<Ledger>();
             var aDifferentAsset = new Asset("A Different Asset");
 
             // Act
-            var result = ledger.GetTransactionsByAsset(aDifferentAsset);
+            var result = classUnderTest.GetTransactionsByAsset(aDifferentAsset);
 
             // Assert
             result.Should().BeEmpty();
