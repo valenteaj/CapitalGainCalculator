@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using CapitalGainCalculator.Service.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();   
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => 
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddCapitalGainCalcServices();
 
 var app = builder.Build();
@@ -20,4 +22,14 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 app.UseHttpsRedirection();
+app.UseExceptionHandler(exceptionHandlerApp => 
+{
+    exceptionHandlerApp.Run(async context => 
+    {
+        if (context.Response.StatusCode == StatusCodes.Status500InternalServerError)
+        {
+            await context.Response.WriteAsync("Internal Server Error");
+        }
+    });
+});
 app.Run();

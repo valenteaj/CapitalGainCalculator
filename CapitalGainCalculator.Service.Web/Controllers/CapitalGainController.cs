@@ -15,7 +15,14 @@ public class CapitalGainController : ControllerBase
     [HttpPost("CalculateChargeableGain")]
     public IActionResult GetCapitalGain([FromBody] TransactionSet transactions)
     {
-        var result = _capitalGainService.GetTotalCapitalGain(transactions);
-        return Ok(result);
+        try
+        {
+            var result = _capitalGainService.GetTotalCapitalGain(transactions);
+            return Ok(result);
+        }
+        catch (InvalidDataException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }
