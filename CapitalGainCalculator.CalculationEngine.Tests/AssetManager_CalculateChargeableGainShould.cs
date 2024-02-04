@@ -33,7 +33,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             var asset = new Asset("test-asset");
             var timestamp = DateTimeOffset.Parse("2021-01-01T00:00:00Z");
             var mockLedger = new Mock<ILedger>();
-            var mockGainData = new CumulativeGainData { TotalNumberOfShares = 0, TotalProofOfActualCost = 0 };
+            var mockGainData = new CumulativeGainData { TotalNumberOfShares = 0, TotalPoolOfActualCost = 0 };
             mockLedger.Setup(_ => _.GetCumulativeGainData(asset, timestamp)).Returns(mockGainData);
             var classUnderTest = new AssetManager(mockLedger.Object);
 
@@ -54,7 +54,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
         [InlineData(100, 1000, -1, 5, -5)]
         public void CalculateChargeableGain_WhenProvidedValidPriceData_ShouldReturnCalculatedGain(
             decimal totalShares, 
-            decimal totalProofOfCost, 
+            decimal totalPoolOfCost, 
             decimal numberOfSharesSold,
             decimal unitPriceAtSale,
             decimal expectedGain)
@@ -66,7 +66,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             var mockGainData = new CumulativeGainData 
             { 
                 TotalNumberOfShares = totalShares, 
-                TotalProofOfActualCost = totalProofOfCost 
+                TotalPoolOfActualCost = totalPoolOfCost 
             };
             mockLedger.Setup(_ => _.GetCumulativeGainData(asset, timestamp)).Returns(mockGainData);
             var classUnderTest = new AssetManager(mockLedger.Object);
@@ -128,7 +128,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
                 .Returns(new CumulativeGainData
                 {
                     TotalNumberOfShares = 1m,
-                    TotalProofOfActualCost = 1m
+                    TotalPoolOfActualCost = 1m
                 });
             mockLedger.Setup(_ => _.GetTransactionsByAsset(asset)).Returns(testTransactions);
             var classUnderTest = new AssetManager(mockLedger.Object);
@@ -204,14 +204,14 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
                 .Returns(new CumulativeGainData
                 {
                     TotalNumberOfShares = 1m,
-                    TotalProofOfActualCost = 1m
+                    TotalPoolOfActualCost = 1m
                 });
 
             mockLedger.Setup(_ => _.GetCumulativeGainData(asset2, timestamp))
                 .Returns(new CumulativeGainData
                 {
                     TotalNumberOfShares = 1m,
-                    TotalProofOfActualCost = 1m
+                    TotalPoolOfActualCost = 1m
                 });
                         
             mockLedger.Setup(_ => _.GetTransactionsByAsset(asset1)).Returns(testTransactionsForAsset1);

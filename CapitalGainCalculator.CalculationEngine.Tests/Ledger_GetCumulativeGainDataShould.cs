@@ -24,7 +24,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
 
             // Assert
             result.TotalNumberOfShares.Should().Be(0);
-            result.TotalProofOfActualCost.Should().Be(0);
+            result.TotalPoolOfActualCost.Should().Be(0);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             result.Should().Be(new CumulativeGainData
             {
                 TotalNumberOfShares = 0m,
-                TotalProofOfActualCost = 0m
+                TotalPoolOfActualCost = 0m
             });
         }
     }

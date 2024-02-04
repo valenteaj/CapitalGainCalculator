@@ -9,7 +9,7 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies
 
         public CumulativeGainData Aggregate(Transaction candidate, CumulativeGainData accumulator)
         {
-            accumulator.TotalProofOfActualCost += candidate.UnitPrice * candidate.NumberOfShares + candidate.TransactionCosts;
+            accumulator.TotalPoolOfActualCost += candidate.UnitPrice * candidate.NumberOfShares + candidate.TransactionCosts;
             accumulator.TotalNumberOfShares += candidate.NumberOfShares;
             return accumulator;
         }
