@@ -10,7 +10,7 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies
 
         public TransactionStrategyCoordinator(IEnumerable<ITransactionStrategy> strategies)
         {
-            foreach (var strategy in strategies)
+            foreach (var strategy in strategies ?? Array.Empty<ITransactionStrategy>())
             {
                 _strategies.Add(strategy.TransactionType, strategy);
             }

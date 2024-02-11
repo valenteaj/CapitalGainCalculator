@@ -34,10 +34,10 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             var timestamp = DateTimeOffset.Parse("2021-01-01T00:00:00Z");
             var mockLedger = new Mock<ILedger>();
             var mockGainData = new CumulativeGainData { TotalNumberOfShares = 0, TotalProofOfActualCost = 0 };
-            mockLedger.Setup(_ => _.GetCumulativeGainData(asset, timestamp)).Returns(mockGainData);
-            var classUnderTest = new AssetManager(mockLedger.Object);
-
             var transaction = new Transaction(TransactionType.Disposal, asset, timestamp, 10m, -1m, 0);
+            
+            mockLedger.Setup(_ => _.GetCumulativeGainData(transaction)).Returns(mockGainData);
+            var classUnderTest = new AssetManager(mockLedger.Object);
 
             // Act
             var fn = () => classUnderTest.CalculateChargeableGain(transaction);
@@ -68,10 +68,9 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
                 TotalNumberOfShares = totalShares, 
                 TotalProofOfActualCost = totalProofOfCost 
             };
-            mockLedger.Setup(_ => _.GetCumulativeGainData(asset, timestamp)).Returns(mockGainData);
-            var classUnderTest = new AssetManager(mockLedger.Object);
-
             var transaction = new Transaction(TransactionType.Disposal, asset, timestamp, unitPriceAtSale, numberOfSharesSold, 0);
+            mockLedger.Setup(_ => _.GetCumulativeGainData(transaction)).Returns(mockGainData);
+            var classUnderTest = new AssetManager(mockLedger.Object);
 
             // Act
             var result = classUnderTest.CalculateChargeableGain(transaction);
@@ -124,7 +123,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
                 new Transaction(TransactionType.Disposal, asset, timestamp, 2m, 1m, 0),
             };
             
-            mockLedger.Setup(_ => _.GetCumulativeGainData(asset, timestamp))
+            mockLedger.Setup(_ => _.GetCumulativeGainData(testTransactions[1]))
                 .Returns(new CumulativeGainData
                 {
                     TotalNumberOfShares = 1m,
@@ -200,14 +199,14 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
                 new Transaction(TransactionType.Disposal, asset2, timestamp, 2m, 1m, 0),
             };
             
-            mockLedger.Setup(_ => _.GetCumulativeGainData(asset1, timestamp))
+            mockLedger.Setup(_ => _.GetCumulativeGainData(testTransactionsForAsset1[1]))
                 .Returns(new CumulativeGainData
                 {
                     TotalNumberOfShares = 1m,
                     TotalProofOfActualCost = 1m
                 });
 
-            mockLedger.Setup(_ => _.GetCumulativeGainData(asset2, timestamp))
+            mockLedger.Setup(_ => _.GetCumulativeGainData(testTransactionsForAsset2[1]))
                 .Returns(new CumulativeGainData
                 {
                     TotalNumberOfShares = 1m,

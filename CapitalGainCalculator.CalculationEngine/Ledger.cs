@@ -7,25 +7,35 @@ namespace CapitalGainCalculator.CalculationEngine
     public class Ledger : ILedger
     {
         private readonly IStore<Transaction> _transactionStore;
+        private readonly IEnumerable<ITransactionFilter> _behaviourFilters;
         private readonly TransactionStrategyCoordinator _context;
-        public Ledger(IStore<Transaction> transactionStore, IEnumerable<ITransactionStrategy> transactionStrategies)
+        public Ledger(
+            IStore<Transaction> transactionStore, 
+            IEnumerable<ITransactionStrategy> transactionStrategies,
+            IEnumerable<ITransactionFilter> behaviourFilters)
         {
             _transactionStore = transactionStore;
+            _behaviourFilters = behaviourFilters ?? Array.Empty<ITransactionFilter>();
             _context = new TransactionStrategyCoordinator(transactionStrategies);
         }
 
-        public CumulativeGainData GetCumulativeGainData(Asset asset, DateTimeOffset? atTimePoint = null)
+        public CumulativeGainData GetCumulativeGainData(Transaction transaction)
         {
             CumulativeGainData data = new CumulativeGainData();
             
             var assetTransactions = 
-                GetTransactionsByAsset(asset)
-                .Where(t => t.TransactionDate < (atTimePoint ?? DateTimeOffset.MaxValue));
+                GetTransactionsByAsset(transaction.Asset)
+                .Where(t => t.TransactionDate < transaction.TransactionDate);
 
-            foreach (var transaction in assetTransactions)
+            foreach (var filter in _behaviourFilters)
             {
-                _context.SetStrategy(transaction.TransactionType);
-                data = _context.ExecuteAggregate(transaction, data);
+                assetTransactions = filter.Filter(transaction, assetTransactions);
+            }
+
+            foreach (var t in assetTransactions)
+            {
+                _context.SetStrategy(t.TransactionType);
+                data = _context.ExecuteAggregate(t, data);
             }
             return data;
         } 

@@ -52,7 +52,7 @@ namespace CapitalGainCalculator.CalculationEngine
             if (disposal.TransactionType != TransactionType.Disposal)
                 throw new ArgumentException("Transaction must be a disposal", "disposal");
             var disposalProceeds = disposal.NumberOfShares * disposal.UnitPrice;
-            var gainData = _ledger.GetCumulativeGainData(disposal.Asset, disposal.TransactionDate);
+            var gainData = _ledger.GetCumulativeGainData(disposal);
             if (gainData.TotalNumberOfShares <= 0) 
                 throw new InvalidDataException($"No remaining shares to dispose on asset {disposal.Asset.Name}");
             var allowableCost = gainData.TotalProofOfActualCost * disposal.NumberOfShares / gainData.TotalNumberOfShares;

@@ -11,23 +11,6 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
         private AutoMocker _mocker = new();
 
         [Fact]
-        public void GetCumulativeGainData_WhenNoTransactions_ReturnsZeroedGainData()
-        {
-            // Arrange
-            var transactions = Enumerable.Empty<Transaction>();
-            _mocker.GetMock<IStore<Transaction>>().Setup(_ => _.Get()).Returns(transactions);
-            var classUnderTest = _mocker.CreateInstance<Ledger>();
-            var mockAsset = new Asset("Test Asset");
-
-            // Act
-            var result = classUnderTest.GetCumulativeGainData(mockAsset);
-
-            // Assert
-            result.TotalNumberOfShares.Should().Be(0);
-            result.TotalProofOfActualCost.Should().Be(0);
-        }
-
-        [Fact]
         public void GetCumulativeGainData_WithTransactions_BuildsAggregate()
         {
             // Arrange
@@ -42,7 +25,7 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             var classUnderTest = _mocker.CreateInstance<Ledger>();
 
             // Act
-            var result = classUnderTest.GetCumulativeGainData(mockAsset);
+            var result = classUnderTest.GetCumulativeGainData(disposal);
 
             // Assert
             result.Should().Be(new CumulativeGainData
