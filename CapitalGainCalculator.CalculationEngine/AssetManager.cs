@@ -55,7 +55,7 @@ namespace CapitalGainCalculator.CalculationEngine
             var gainData = _ledger.GetCumulativeGainData(disposal);
             if (gainData.TotalNumberOfShares <= 0) 
                 throw new InvalidDataException($"No remaining shares to dispose on asset {disposal.Asset.Name}");
-            var allowableCost = gainData.TotalProofOfActualCost * disposal.NumberOfShares / gainData.TotalNumberOfShares;
+            var allowableCost = gainData.TotalPoolOfActualCost * disposal.NumberOfShares / gainData.TotalNumberOfShares;
             var chargeableGain = ((disposalProceeds - allowableCost) * -1) - disposal.TransactionCosts;
             return chargeableGain;
         }

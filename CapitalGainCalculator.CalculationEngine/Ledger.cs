@@ -7,15 +7,15 @@ namespace CapitalGainCalculator.CalculationEngine
     public class Ledger : ILedger
     {
         private readonly IStore<Transaction> _transactionStore;
-        private readonly IEnumerable<ITransactionFilter> _behaviourFilters;
+        private readonly IEnumerable<ITransactionProcessor> _transactionProcessors;
         private readonly TransactionStrategyCoordinator _context;
         public Ledger(
             IStore<Transaction> transactionStore, 
             IEnumerable<ITransactionStrategy> transactionStrategies,
-            IEnumerable<ITransactionFilter> behaviourFilters)
+            IEnumerable<ITransactionProcessor> transactionProcessors)
         {
             _transactionStore = transactionStore;
-            _behaviourFilters = behaviourFilters ?? Array.Empty<ITransactionFilter>();
+            _transactionProcessors = transactionProcessors ?? Array.Empty<ITransactionProcessor>();
             _context = new TransactionStrategyCoordinator(transactionStrategies);
         }
 
@@ -27,12 +27,17 @@ namespace CapitalGainCalculator.CalculationEngine
                 GetTransactionsByAsset(transaction.Asset)
                 .Where(t => t.TransactionDate < transaction.TransactionDate);
 
-            foreach (var filter in _behaviourFilters)
+            var postProcessedTransactions = new List<Transaction>(assetTransactions)
             {
-                assetTransactions = filter.Filter(transaction, assetTransactions);
+                transaction
+            };
+            
+            foreach (var filter in _transactionProcessors)
+            {
+                postProcessedTransactions = filter.Process(postProcessedTransactions).ToList();
             }
 
-            foreach (var t in assetTransactions)
+            foreach (var t in postProcessedTransactions.SkipLast(1)) // Skiplast removes the final disposal
             {
                 _context.SetStrategy(t.TransactionType);
                 data = _context.ExecuteAggregate(t, data);

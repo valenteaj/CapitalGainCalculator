@@ -181,10 +181,11 @@ Refer to LICENSE file
 
 ## Features
 - Support for multiple assets
+- Supports Bed and Breakfast (Outside a Section 104 holding) rules
 - Factors in fees for accurate allowance deduction
 
 ## Upcoming Development
-- Acknowledgement of Bed and Breakfasting rules (Outside a Section 104 holding)
+- Handling of Same day rules (Outside a Section 104 holding)
 - Stability improvements
 
 ## Tests

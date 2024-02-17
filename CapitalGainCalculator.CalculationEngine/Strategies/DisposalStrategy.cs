@@ -10,7 +10,7 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies
         public CumulativeGainData Aggregate(Transaction candidate, CumulativeGainData accumulator)
         {
             var invertedNoOfShares = candidate.NumberOfShares * -1;
-            accumulator.TotalProofOfActualCost -= accumulator.TotalProofOfActualCost * invertedNoOfShares / accumulator.TotalNumberOfShares;
+            accumulator.TotalPoolOfActualCost -= accumulator.TotalPoolOfActualCost * invertedNoOfShares / accumulator.TotalNumberOfShares;
             accumulator.TotalNumberOfShares -= invertedNoOfShares;
             return accumulator;
         }

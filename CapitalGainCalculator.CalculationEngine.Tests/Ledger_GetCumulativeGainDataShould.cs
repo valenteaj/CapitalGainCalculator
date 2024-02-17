@@ -31,8 +31,10 @@ namespace CapitalGainCalculator.CalculationEngine.Tests
             result.Should().Be(new CumulativeGainData
             {
                 TotalNumberOfShares = 0m,
-                TotalProofOfActualCost = 0m
+                TotalPoolOfActualCost = 0m
             });
         }
+
+        //TODO Add tests for Transaction processors
     }
 }
