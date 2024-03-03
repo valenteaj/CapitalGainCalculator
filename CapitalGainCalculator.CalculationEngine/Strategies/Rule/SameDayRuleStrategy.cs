@@ -6,6 +6,7 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies.Rule
     public class SameDayRuleStrategy : IRuleStrategy
     {
         public byte Priority => 200;
+        public string RuleName => "Same-Day Rule";
 
         public bool CanExecute(IEnumerable<Transaction> transactions, Transaction context)
         {
@@ -22,9 +23,9 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies.Rule
             return Filter(transactions, context);
         }
 
-        public GainData Reduce(GainData gainData, IEnumerable<Transaction> matchedTransactions, Transaction context, decimal unitsSold)
+        public ReportData Reduce(ReportData gainData, IEnumerable<Transaction> matchedTransactions, Transaction context, decimal unitsSold)
         {
-            var extracted = gainData.RemainingTransactions.Except(matchedTransactions);
+            var extracted = gainData.UnmatchedTransactions.Except(matchedTransactions);
             var pool = matchedTransactions.First();
             var proportionOfSale = unitsSold / Math.Abs(context.NumberOfShares);
 
@@ -43,7 +44,7 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies.Rule
                 };
                 remainingTransactions.Add(replacementPool);
             }
-            gainData.RemainingTransactions = remainingTransactions;
+            gainData.UnmatchedTransactions = remainingTransactions;
             gainData.Gains.Add(gain);
             return gainData;
         }

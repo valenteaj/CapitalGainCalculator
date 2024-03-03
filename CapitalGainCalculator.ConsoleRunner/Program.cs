@@ -4,6 +4,7 @@ using CapitalGainCalculator.CalculationEngine.Strategies.Mutator;
 using CapitalGainCalculator.CalculationEngine.Validators;
 using CapitalGainCalculator.Common.Interfaces;
 using CapitalGainCalculator.Common.Models;
+using CapitalGainCalculator.ReportGenerator.Reporters;
 
 var ruleStrategies = new IRuleStrategy[]
 {
@@ -48,14 +49,15 @@ var transactions3 = new List<Transaction>
 try
 {
     var processor = new TransactionRuleProcessor(ruleStrategies, mutatorStrategies, new PortfolioValidator());
-    var gainData = processor.Process(transactions1);
-    Console.WriteLine($"{string.Join('+', gainData.Gains)}={gainData.Gains.Sum():C2}");
+    var reporter = new DecimalGainReporter();
+    var gainData = processor.Process(transactions1, reporter);
+    Console.WriteLine($"{gainData:C2}");
 
-    gainData = processor.Process(transactions2);
-    Console.WriteLine($"{string.Join('+', gainData.Gains)}={gainData.Gains.Sum():C2}");
+    gainData = processor.Process(transactions2, reporter);
+    Console.WriteLine($"{gainData:C2}");
 
-    gainData = processor.Process(transactions3);
-    Console.WriteLine($"{string.Join('+', gainData.Gains)}={gainData.Gains.Sum():C2}");
+    gainData = processor.Process(transactions3, reporter);
+    Console.WriteLine($"{gainData:C2}");
 }
 catch (Exception ex)
 {

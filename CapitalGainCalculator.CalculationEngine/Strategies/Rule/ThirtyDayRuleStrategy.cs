@@ -6,6 +6,7 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies.Rule
     public class ThirtyDayRuleStrategy : IRuleStrategy
     {
         public byte Priority => 150;
+        public string RuleName => "30-Day Rule";
 
         public bool CanExecute(IEnumerable<Transaction> transactions, Transaction context)
         {
@@ -32,9 +33,9 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies.Rule
             return result;
         }
 
-        public GainData Reduce(GainData gainData, IEnumerable<Transaction> matchedTransactions, Transaction context, decimal unitsSold)
+        public ReportData Reduce(ReportData gainData, IEnumerable<Transaction> matchedTransactions, Transaction context, decimal unitsSold)
         {
-            var extracted = gainData.RemainingTransactions.Except(matchedTransactions);
+            var extracted = gainData.UnmatchedTransactions.Except(matchedTransactions);
             var eclipsedPurchases = matchedTransactions.Except(new[] {matchedTransactions.Last()});
             var lastPurchase = matchedTransactions.Last();
 
@@ -64,7 +65,7 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies.Rule
                 };
                 remainingTransactions.Add(replacementPool);
             }
-            gainData.RemainingTransactions = remainingTransactions;
+            gainData.UnmatchedTransactions = remainingTransactions;
             gainData.Gains.Add(gain);
             return gainData;
         }

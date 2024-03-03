@@ -2,7 +2,7 @@
 using CapitalGainCalculator.Common.Models;
 
 namespace CapitalGainCalculator.CalculationEngine;
-public class TransactionRuleProcessor
+public class TransactionRuleProcessor : ITransactionProcessor
 {
     private readonly IEnumerable<IRuleStrategy> _ruleStrategies;
     private readonly IEnumerable<IMutatorStrategy> _mutatorStrategies;
@@ -18,7 +18,7 @@ public class TransactionRuleProcessor
         _ruleStrategies = ruleStrategies;
     }
 
-    public GainData Process(IEnumerable<Transaction> transactions)
+    public T Process<T>(IEnumerable<Transaction> transactions, IReporter<T> reporter)
     {
         _portfolioValidator?.Validate(transactions);
         IEnumerable<Transaction> preMatched = new List<Transaction>(transactions);
@@ -27,17 +27,17 @@ public class TransactionRuleProcessor
             preMatched = mutatorStrategy.Execute(preMatched);
         }
 
-        var gainData = new GainData(preMatched);
+        var gainData = new ReportData(preMatched);
         foreach (var transaction in preMatched.OrderBy(t => t.TransactionDate))
         {
             var strategies = _ruleStrategies
-                .Where(s => s.CanExecute(gainData.RemainingTransactions, transaction))
+                .Where(s => s.CanExecute(gainData.UnmatchedTransactions, transaction))
                 .OrderByDescending(s => s.Priority);
 
             var units = Math.Abs(transaction.NumberOfShares);
             foreach (var strategy in strategies)
             {
-                var matches = strategy.Match(gainData.RemainingTransactions, transaction);
+                var matches = strategy.Match(gainData.UnmatchedTransactions, transaction);
                 var matchUnits = Math.Min(matches.Sum(t => t.NumberOfShares), units);
                 var reduced = strategy.Reduce(gainData, matches, transaction, matchUnits);
                 units -= matchUnits;
@@ -47,6 +47,6 @@ public class TransactionRuleProcessor
                 }
             }
         }
-        return gainData;
+        return reporter.GenerateReport(gainData);
     }
 }

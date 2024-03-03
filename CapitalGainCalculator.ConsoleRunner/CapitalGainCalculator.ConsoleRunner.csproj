@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CapitalGainCalculator.CalculationEngine\CapitalGainCalculator.CalculationEngine.csproj" />
     <ProjectReference Include="..\CapitalGainCalculator.Common\CapitalGainCalculator.Common.csproj" />
+    <ProjectReference Include="..\CapitalGainCalculator.ReportGenerator\CapitalGainCalculator.ReportGenerator.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
