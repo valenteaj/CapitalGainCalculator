@@ -79,8 +79,8 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies.Rule
                 lastTransaction.TransactionType,
                 lastTransaction.Asset,
                 lastTransaction.TransactionDate,
-                averageUnitPrice,
                 numberOfUnits,
+                averageUnitPrice,
                 0);
         }
 

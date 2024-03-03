@@ -2,7 +2,7 @@ namespace CapitalGainCalculator.Common.Models
 {
     public record Transaction
     {
-        public Transaction(TransactionType transactionType, Asset asset, DateTimeOffset transactionDate, decimal unitPrice, decimal numberOfShares, decimal transactionCosts)
+        public Transaction(TransactionType transactionType, Asset asset, DateTimeOffset transactionDate, decimal numberOfShares, decimal unitPrice, decimal transactionCosts)
         {
             TransactionDate = transactionDate;
             Asset = asset ?? throw new ArgumentException("Transaction must be associated with an asset", "asset");

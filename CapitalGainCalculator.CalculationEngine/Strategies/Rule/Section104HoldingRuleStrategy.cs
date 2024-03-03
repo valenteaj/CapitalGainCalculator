@@ -54,13 +54,12 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies.Rule
             var costs = transactions.Sum(t => t.TransactionCosts);
             var averageUnitPrice = transactions.Sum(t => (t.UnitPrice * t.NumberOfShares) + t.TransactionCosts) / numberOfUnits;
             var lastTransaction = transactions.Last();
-            return new Transaction
-            (
+            return new Transaction(
                 lastTransaction.TransactionType,
                 lastTransaction.Asset,
                 lastTransaction.TransactionDate,
-                averageUnitPrice,
                 numberOfUnits,
+                averageUnitPrice,
                 0
             );
         }

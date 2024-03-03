@@ -21,8 +21,8 @@ namespace CapitalGainCalculator.CalculationEngine.Strategies.Mutator
                     TransactionType.Purchase, 
                     grp.First().Asset, 
                     grp.First().TransactionDate, 
-                    grp.Sum(t => t.UnitPrice), 
                     grp.Sum(t => t.NumberOfShares), 
+                    grp.Sum(t => t.UnitPrice), 
                     grp.Sum(t => t.TransactionCosts))
                 );
             result.AddRange(aggregatedTransactions);
