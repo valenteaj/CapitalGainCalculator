@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CapitalGainCalculator.CalculationEngine\CapitalGainCalculator.CalculationEngine.csproj" />
+    <ProjectReference Include="..\CapitalGainCalculator.Common\CapitalGainCalculator.Common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

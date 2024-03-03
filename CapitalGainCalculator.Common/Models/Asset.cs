@@ -1,4 +1,4 @@
-namespace CapitalGainCalculator.CalculationEngine.Models
+namespace CapitalGainCalculator.Common.Models
 {
     public class Asset
     {

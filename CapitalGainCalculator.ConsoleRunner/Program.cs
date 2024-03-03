@@ -1,28 +1,51 @@
 ﻿using CapitalGainCalculator.CalculationEngine;
-using CapitalGainCalculator.CalculationEngine.Interfaces;
-using CapitalGainCalculator.CalculationEngine.Models;
-using CapitalGainCalculator.CalculationEngine.Strategies;
+using CapitalGainCalculator.CalculationEngine.Strategies.Rule;
+using CapitalGainCalculator.CalculationEngine.Strategies.Mutator;
+using CapitalGainCalculator.CalculationEngine.Validators;
+using CapitalGainCalculator.Common.Interfaces;
+using CapitalGainCalculator.Common.Models;
 
-IStore<Transaction> store = new TransactionStore();
-var strategies = new ITransactionStrategy[] { new PurchaseStrategy(), new DisposalStrategy() };
-ILedger ledger = new Ledger(store, strategies);
-IAssetManager portfolio = new AssetManager(ledger);
+var ruleStrategies = new IRuleStrategy[]
+{
+    new ThirtyDayRuleStrategy(),
+    new Section104HoldingRuleStrategy(),
+    new SameDayRuleStrategy(),
+};
 
-var asset = new Asset("A test asset");
-portfolio.Buy(asset, 10, 60m, 3+3, new DateTimeOffset(new DateTime(2024, 1, 10)));
-portfolio.Buy(asset, 30, 80m, 3+12, new DateTimeOffset(new DateTime(2024, 1, 11)));
-portfolio.Sell(asset, 10, 100m, 3, new DateTimeOffset(new DateTime(2024, 1, 12)));
-portfolio.Buy(asset, 10, 120m, 3+6, new DateTimeOffset(new DateTime(2024, 1, 13)));
-portfolio.Sell(asset, 10, 150m, 3, new DateTimeOffset(new DateTime(2024, 1, 14)));
+var mutatorStrategies = new IMutatorStrategy[]
+{
+    new SameDayPurchaseMutatorStrategy(),
+    new SameDayDisposalMutatorStrategy()
+};
 
-var asset2 = new Asset("HMRC HS284 Example 3");
-portfolio.Buy(asset2, 1000, 4m, 150, new DateTimeOffset(new DateTime(2014, 4, 1)));
-portfolio.Buy(asset2, 500, 4.10m, 80, new DateTimeOffset(new DateTime(2017, 9, 1)));
-portfolio.Sell(asset2, 700, 4.8m, 100, new DateTimeOffset(new DateTime(2022, 5, 1)));
-portfolio.Sell(asset2, 400, 5.2m, 105, new DateTimeOffset(new DateTime(2023, 2, 1)));
+var asset = new Asset("test");
+var transactions = new List<Transaction>
+{
+    // new Transaction(TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2024, 1, 10)), 10, 60m, 0),
+    // new Transaction(TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2024, 1, 11)), 10, 60m, 0),
+    // new Transaction(TransactionType.Disposal, asset, new DateTimeOffset(new DateTime(2024, 2, 10)), 15, 120m, 0),
+    // new Transaction(TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2024, 4, 14)), 10, 60m, 0),
+    // new Transaction(TransactionType.Disposal, asset, new DateTimeOffset(new DateTime(2024, 4, 15)), 10, 60m, 0),
+    // new Transaction(TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2024, 4, 16)), 10, 60m, 0),
+    // new Transaction(TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2024, 4, 16)), 10, 60m, 0),
+    // new Transaction(TransactionType.Disposal, asset, new DateTimeOffset(new DateTime(2024, 4, 16)), 10, 60m, 0),
 
-var asset3 = new Asset("Another test asset");
-portfolio.Buy(asset3, 0.64421416m, 155.2278826m, 0, new DateTimeOffset(new DateTime(2024, 1, 15)));
-portfolio.Sell(asset3, 0.64421416m, 1933.56m, 3, new DateTimeOffset(new DateTime(2024, 1, 16)));
+    new Transaction( TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2014, 4, 1)), 4m, 1000, 150),
+    new Transaction( TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2017, 4, 1)), 4.1m, 500, 80),
+    new Transaction( TransactionType.Disposal, asset, new DateTimeOffset(new DateTime(2022, 4, 1)), 4.8m, 7000, 100),
+    new Transaction( TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2022, 4, 1)), 5.2m, 300, 105),
+    new Transaction( TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2022, 4, 2)), 5.4m, 300, 105),
+    new Transaction( TransactionType.Purchase, asset, new DateTimeOffset(new DateTime(2022, 4, 3)), 5.6m, 300, 105),
+    new Transaction( TransactionType.Disposal, asset, new DateTimeOffset(new DateTime(2023, 4, 1)), 4.8m, 1700, 100),
+};
 
-Console.WriteLine(portfolio);
+try
+{
+    var processor = new TransactionRuleProcessor(ruleStrategies, mutatorStrategies, new PortfolioValidator());
+    var gainData = processor.Process(transactions);
+    Console.WriteLine(gainData.Gains.Sum());
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"ERROR: {ex.Message}");
+}

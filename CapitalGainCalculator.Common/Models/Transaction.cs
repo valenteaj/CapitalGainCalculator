@@ -1,4 +1,4 @@
-namespace CapitalGainCalculator.CalculationEngine.Models
+namespace CapitalGainCalculator.Common.Models
 {
     public record Transaction
     {
@@ -24,10 +24,5 @@ namespace CapitalGainCalculator.CalculationEngine.Models
             TransactionType.Purchase when numberOfShares < 0 => numberOfShares * -1,
             _ => numberOfShares
         };
-
-        public override string ToString()
-        {
-            return $"{TransactionDate} {TransactionType} [{Asset.Name}]: {NumberOfShares}@{UnitPrice:C2} = {NumberOfShares*UnitPrice:C2}";
-        }
     }
 }
